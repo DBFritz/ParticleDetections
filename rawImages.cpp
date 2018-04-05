@@ -4,8 +4,6 @@
 #include <fstream>
 #include <array>
 #include <cstring>
-//#include <map>
-//#include <utility>
 #include <list>
 
 
@@ -155,45 +153,6 @@ namespace raw{
                         data[itPix->y * width + itPix->x] = itPix->value;
                 return events;
             }
-            /*  ESTO APESTA... Lo haré de nuevo
-            int findEvent(pixelValue_t threshold = maxValue/2)
-            {
-                std::map<std::pair<unsigned int,unsigned int>,pixelValue_t> highPixels;
-                for (unsigned int y=0; y<height; y++)
-                    for(unsigned int x=0; x<width; x++)
-                        if ( (*this)(x,y)>threshold)
-                            highPixels.insert( std::make_pair( std::make_pair(x,y) , (*this)(x,y) ));
-                return 0;
-
-                bool added = false;
-                int events = 0;
-                while (!highPixels.empty())
-                {
-                    std::map<std::pair<unsigned int,unsigned int>,pixelValue_t>::iterator it = highPixels.begin();
-                    if (!added)
-                    {
-                        unsigned int x = std::get<0>(it->first);
-                        unsigned int y = std::get<1>(it->first);
-                        pixelValue_t value = it->second;
-                        // CREO NUEVO EVENTO
-                        // AÑADO ESTE VALOR
-                        events++;
-                    }
-                    for( std::map<std::pair<unsigned int,unsigned int>,pixelValue_t>::iterator 
-                            it = highPixels.begin(); it != highPixels.end(); ++it)
-                    {
-                        unsigned int x = std::get<0>(it->first);
-                        unsigned int y = std::get<1>(it->first);
-                        pixelValue_t value = it->second;
-                        added=false;
-                        /// Para todos los elementos del evento
-                            // es adyacente?
-                                // lo agrego al evento
-                                added=true;
-                    }
-                }
-            }
-            */
             
     };
 
