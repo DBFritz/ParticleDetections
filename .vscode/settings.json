@@ -45,5 +45,6 @@
         "cctype": "cpp",
         "clocale": "cpp",
         "cwctype": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

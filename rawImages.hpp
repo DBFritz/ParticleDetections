@@ -1,3 +1,6 @@
+#ifndef RAW_IMAGES_HPP
+#define RAW_IMAGES_HPP
+
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
@@ -7,10 +10,8 @@
 #include <list>
 #include <cmath>
 
-#ifndef RAW_IMAGES_HPP
-#define RAW_IMAGES_HPP
 namespace raw{
-    typedef double pixelValue_t;
+    typedef unsigned short int pixelValue_t;
 
     struct monocromePixel_t {
         unsigned int x;
@@ -27,13 +28,11 @@ namespace raw{
         public:
 
             std::list<monocromePixel_t> pixels;         // TODO: make it private
-
-
             
             /// Push back a new pixel
             void addPixel(unsigned int x, unsigned int y, pixelValue_t value);
 
-            pixelValue_t getSaturationValue(){ return saturationValue; };
+            pixelValue_t getSaturationValue();
 
             /// Ask if the pixel with coordinates (x,y) is in the Event
             bool isHere(unsigned int x, unsigned int y);
@@ -53,16 +52,18 @@ namespace raw{
 
     class rawPhoto_t
     {
-        public:
+        private:
             pixelValue_t saturationValue{1023};
             unsigned int width;
             unsigned int height;
             pixelValue_t *data;
+            static bool isAdjacent(int x_1, int y_1, int x_2, int y_2);
         
         public:
             static const int maxValue{1024-1};
             /// Constructor: from a linear stream it cut it and put it in a rawPhoto_t
             rawPhoto_t(unsigned int _width, unsigned int _height, pixelValue_t *stream);
+            ~rawPhoto_t();
 
             pixelValue_t getValue(unsigned int x, unsigned int y);
 
@@ -76,8 +77,6 @@ namespace raw{
             void print(std::ostream output, unsigned int  _width, unsigned int  _height);
             void print(std::ostream output, bool printHeader);
             void print(std::ostream & output, unsigned int  _width, unsigned int  _height, bool printHeader, char spacer);
-            
-            static bool isAdjacent(int x_1, int y_1, int x_2, int y_2);
 
             void toHistogram(int *toFill);
 
