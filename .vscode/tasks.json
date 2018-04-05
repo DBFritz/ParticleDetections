@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build for debugging current .cpp into ./bin/",
+            "type": "shell",
+            "linux": {
+                "command": "g++.exe",
+                "args": [
+                    "-g", "-Wall", "-std=c++11", "-o", "'${fileDirname}/bin/${fileBasenameNoExtension}'", "'${file}'"
+                ],
+            },
+            "windows": {
+                "command": "C:\\cygwin64\\bin\\g++.exe",
+                "args": [
+                    "-g", "-Wall", "-std=c++11", "-o", "'${fileDirname}/bin/${fileBasenameNoExtension}.exe'", "'${file}'"
+                ]
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

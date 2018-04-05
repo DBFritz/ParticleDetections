@@ -57,9 +57,14 @@ namespace raw{
                 saturationValue = saturation;
             }
             /// Return the number of saturated Pixels
+            int saturatedPixels(){ return saturatedPixels(saturationValue); }
             int saturatedPixels(pixelValue_t saturation)
             {
-                
+                int n;
+                for (std::list<monocromePixel_t>::iterator it = pixels.begin(); it != pixels.end(); it++)
+                    if (it->value >= saturation)
+                        n++;
+                return n;
             }
 
             /// Return the total charge of the event
