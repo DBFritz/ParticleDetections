@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "Build & Launch with GDB",
             "type": "cppdbg",
             "request": "launch",
             "args": [],
@@ -14,14 +14,14 @@
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",
-            "program": "'${fileDirname}/bin/${fileBasenameNoExtension}.exe'",
+            "program": "${fileDirname}/bin/${fileBasenameNoExtension}",
             "linux": {
                 "program": "${fileDirname}/bin/${fileBasenameNoExtension}",
                 "miDebuggerPath": "gdb",
             },
             "windows": {
-                "program": "'${fileDirname}/bin/${fileBasenameNoExtension}.exe'",
-                "miDebuggerPath": "C:\\cygwin64\\bin\\gdb.exe",
+                "program": "${workspaceRoot}/bin/${fileBasenameNoExtension}.exe",
+                "miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe",
             },
             "setupCommands": [
                 {
@@ -29,7 +29,8 @@
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
-            ]
+            ],
+            "preLaunchTask": "Build with g++ into ./bin/",
         }
     ]
 }

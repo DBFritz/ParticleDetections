@@ -25,14 +25,7 @@ namespace raw{
 
             std::list<monocromePixel_t> pixels;         // TODO: make it private
 
-            // TODO: Cuidado, no verifica si le mandas verdura
-            /*
-            pixelValue_t& operator[] (int i)
-            {
-                std::list<monocromePixel_t>::iterator it(pixels.begin());
-                std::advance(it, i);
-                return *it;
-            }*/
+
             
             /// Push back a new pixel
             void addPixel(unsigned int x, unsigned int y, pixelValue_t value)
@@ -141,12 +134,6 @@ namespace raw{
                     for(unsigned int x=0; x<width; x++)
                         if ( (*this)(x,y)>threshold)
                         {
-                            /*  Es mejor apagar los pixeles y luego prenderlos con su respectivo valor.
-                            bool toAdd = true;
-                            std::cout << "Encontre un valor grande " << std::endl;
-                            for (std::list<event_t>::iterator it = events.begin(); it != events.end(); it++)  // para todos los eventos encontrados
-                                if ( (*it).isHere(x,y) )
-                                    toAdd =false;*/
                             std::cout << "Encontré un evento!" << std::endl;
                             event_t event;
                             recursiveAddingto(&event,x,y,threshold);
@@ -207,7 +194,7 @@ namespace raw{
 int main(int argc, char *argv[])
 {
     using namespace std;
-    
+
     const int width=2592, height=1944;
     raw::pixelValue_t *stream = (raw::pixelValue_t*)malloc(height*width*sizeof(raw::pixelValue_t));
     if (stream == NULL){
@@ -231,7 +218,6 @@ int main(int argc, char *argv[])
     for (list<raw::event_t>::iterator it = events.begin(); it != events.end(); it++)    // Esta es la forma de iterar sobre todos 
         cout << "Carga: " << it->charge() << endl;                                      // los eventos encontrados en una foto. FEA!
     photo.print(20, 15, false, '\t');
-    
     /*
     for(int f=1;;f++)
     {
@@ -254,4 +240,5 @@ int main(int argc, char *argv[])
         cout << rawPhoto(0,0) << endl;
     }
     */
+   return 0;
 }

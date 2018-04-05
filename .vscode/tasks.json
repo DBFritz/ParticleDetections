@@ -2,23 +2,29 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build for debugging current .cpp into ./bin/",
+            "label": "Build with g++ into ./bin/",
             "type": "shell",
             "linux": {
                 "command": "g++.exe",
                 "args": [
-                    "-g", "-Wall", "-std=c++11", "-o", "'${fileDirname}/bin/${fileBasenameNoExtension}'", "'${file}'"
+                    "-g", "-Wall", "-std=c++11", "-o", "bin/${fileBasenameNoExtension}\"", "'${file}'"
                 ],
             },
             "windows": {
-                "command": "C:\\cygwin64\\bin\\g++.exe",
+                "command": "g++",
                 "args": [
-                    "-g", "-Wall", "-std=c++11", "-o", "'${fileDirname}/bin/${fileBasenameNoExtension}.exe'", "'${file}'"
+                    "-g", "-Wall", "-std=c++11", "-o", ".\\bin\\${fileBasenameNoExtension}.exe", "${relativeFile}"
                 ]
             },
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared"
             }
         }
     ]
