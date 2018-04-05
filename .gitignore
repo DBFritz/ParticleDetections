@@ -3,3 +3,6 @@ bin/
 
 #Folder with data
 data/
+
+#Local programs
+local/
