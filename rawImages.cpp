@@ -6,7 +6,6 @@
 #include <cstring>
 #include <list>
 #include <cmath>
-
 #include "rawImages.hpp"
 
 void raw::event_t::addPixel(unsigned int x, unsigned int y, pixelValue_t value)
