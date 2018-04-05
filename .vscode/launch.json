@@ -4,7 +4,6 @@
     // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "(gdb) Launch",
             "type": "cppdbg",
@@ -15,6 +14,7 @@
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",
+            "program": "'${fileDirname}/bin/${fileBasenameNoExtension}.exe'",
             "linux": {
                 "program": "${fileDirname}/bin/${fileBasenameNoExtension}",
                 "miDebuggerPath": "gdb",
