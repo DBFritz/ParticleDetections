@@ -5,9 +5,10 @@
 #include <array>
 #include <cstring>
 #include <list>
+#include <cmath>
 
 namespace raw{
-    typedef unsigned short int pixelValue_t;
+    typedef double pixelValue_t;
 
     struct monocromePixel_t {
         unsigned int x;
@@ -34,6 +35,8 @@ namespace raw{
                 pixels.push_back(newPixel);
                 nPixels++;
             }
+
+            pixelValue_t getSaturationValue(){ return saturationValue; }
 
             /// Ask if the pixel with coordinates (x,y) is in the Event
             bool isHere(unsigned int x, unsigned int y)
@@ -91,10 +94,11 @@ namespace raw{
                 if (0<=x && x<= width  &&  0<=y && y<=height) return  data[y*width+x];
                 return 0;
             }
+            // TODO: NO VALIDA
             pixelValue_t& operator() (int x, int y) { return data[y*width+x]; }
             pixelValue_t& operator[] (int i) { return data[i]; }
 
-            void print()                                                    { print(std::cout, width, height, true, '\t'); }
+            void print()                                                    { print(std::cout, width, height, false, '\t'); }
             void print(unsigned int  _width, unsigned int  _height, bool printHeader, char spacer) {print(std::cout,_width,_height,printHeader,spacer); }
             void print(std::ostream output)                                 { print(output, width, height, true, '\t'); }
             void print(std::ostream output, unsigned int  _width, unsigned int  _height)    
@@ -115,6 +119,15 @@ namespace raw{
                 return ((x_1-1==x_1 || x_1==x_2 || x_1+1==x_2) && (y_1-1==y_2 || y_1==y_2 || y_1+1==y_2));
             }
             
+
+            void toHistogram(int *toFill)
+            {
+                for(pixelValue_t i=0; i<saturationValue; i++) toFill[(int)std::floor(i)]=0;
+                for (unsigned int y=0; y<height; y++)
+                    for(unsigned int x=0; x<width; x++)
+                        ++toFill[(int)std::floor(data[y*width+x])];
+            }
+
             int recursiveAddingto(event_t * event, int x, int y, pixelValue_t threshold = maxValue/2)
             {
                 if (getValue(x,y)<threshold) return 0;
@@ -195,6 +208,44 @@ int main(int argc, char *argv[])
 {
     using namespace std;
 
+    char path[64] = "/dev/shm/out.0001.raw";
+    const int width=2592, height=1944;
+    raw::pixelValue_t *stream = (raw::pixelValue_t*)malloc(height*width*sizeof(raw::pixelValue_t));
+    if (stream == NULL){
+        cerr << "Error allocating memory" << endl;
+        return -1;
+    }
+    if (raw::rawtoArray(stream, path, width, height)) return 0;
+    using namespace raw;
+    rawPhoto_t rawPhoto(width, height, stream);
+    free(stream);
+
+    for(int x=0;x<width;x++)
+    {
+        double prom =0;
+        for(int y=0;y<height;y++)
+        {
+            prom+=rawPhoto(x,y);
+        }
+        prom /= height;
+        for(int y=0;y<height;y++)
+        {
+            rawPhoto(x,y)-=prom;
+        }
+    }
+    //rawPhoto.print();
+
+    int toFill[1023] ={0};
+    rawPhoto.toHistogram(toFill+50);
+    for(int i=0; i<1023;i++)
+        cout << i << '\t' << toFill[i] << endl;
+}
+
+/*
+int main(int argc, char *argv[])
+{
+    using namespace std;
+
     const int width=2592, height=1944;
     raw::pixelValue_t *stream = (raw::pixelValue_t*)malloc(height*width*sizeof(raw::pixelValue_t));
     if (stream == NULL){
@@ -218,7 +269,15 @@ int main(int argc, char *argv[])
     for (list<raw::event_t>::iterator it = events.begin(); it != events.end(); it++)    // Esta es la forma de iterar sobre todos 
         cout << "Carga: " << it->charge() << endl;                                      // los eventos encontrados en una foto. FEA!
     photo.print(20, 15, false, '\t');
-    /*
+
+
+   return 0;
+}*/
+
+/*
+int main(int argc, char *argv[])
+{
+
     for(int f=1;;f++)
     {
         char path[64];
@@ -239,6 +298,5 @@ int main(int argc, char *argv[])
 
         cout << rawPhoto(0,0) << endl;
     }
-    */
-   return 0;
 }
+*/
