@@ -87,6 +87,16 @@ void raw::rawPhoto_t::print(std::ostream & output, unsigned int  _width, unsigne
         output << std::endl;
     }
 }
+void raw::rawPhoto_t::print(std::ofstream & output, bool printHeader, char spacer)
+{
+    if (printHeader)
+        output << height << 'x' << width << std::endl;
+    for (unsigned int y=0; y < height; y++) {
+        for (unsigned int x=0; x<width; x++)
+            output << data[y*width+x] << spacer;
+        output << std::endl;
+    }
+}
             
 bool raw::rawPhoto_t::isAdjacent(int x_1, int y_1, int x_2, int y_2){
     return ((x_1-1==x_1 || x_1==x_2 || x_1+1==x_2) && (y_1-1==y_2 || y_1==y_2 || y_1+1==y_2));
@@ -105,7 +115,6 @@ int raw::rawPhoto_t::recursiveAddingto(event_t * event, int x, int y, pixelValue
 {
     if (getValue(x,y)<threshold) return 0;
     event->addPixel(x,y, getValue(x,y));
-    std::cout << '\t' << "Estoy agregando x=" << x << " y=" << y << std::endl;
     data[y*width+x] = 0; //Apago el pixel para que no lo vuelva a contar
     return 1+recursiveAddingto(event, x+1, y, threshold)+
             recursiveAddingto(event, x, y+1, threshold)+
@@ -120,7 +129,6 @@ std::list<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t threshold)
         for(unsigned int x=0; x<width; x++)
             if ( (*this)(x,y)>threshold)
             {
-                std::cout << "Encontré un evento!" << std::endl;
                 raw::event_t event;
                 recursiveAddingto(&event,x,y,threshold);
                 events.push_back(event);

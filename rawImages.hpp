@@ -77,6 +77,7 @@ namespace raw{
             void print(std::ostream output, unsigned int  _width, unsigned int  _height);
             void print(std::ostream output, bool printHeader);
             void print(std::ostream & output, unsigned int  _width, unsigned int  _height, bool printHeader, char spacer);
+            void print(std::ofstream & output, bool printHeader, char spacer);
 
             void toHistogram(int *toFill);
 
