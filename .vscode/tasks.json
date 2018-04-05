@@ -5,15 +5,17 @@
             "label": "Build with g++ into ./bin/",
             "type": "shell",
             "linux": {
-                "command": "g++.exe",
+                "command": "g++",
                 "args": [
-                    "-g", "-Wall", "-std=c++11", "-o", "bin/${fileBasenameNoExtension}\"", "'${file}'"
+                    "-g", "-Wall", "-std=c++11", "-o", "bin/${fileBasenameNoExtension}", "'${file}'",
+                    "'${workspaceFolder}/rawImages.cpp'"
                 ],
             },
             "windows": {
                 "command": "g++",
                 "args": [
-                    "-g", "-Wall", "-std=c++11", "-o", ".\\bin\\${fileBasenameNoExtension}.exe", "${relativeFile}"
+                    "-g", "-Wall", "-std=c++11", "-o", ".\\bin\\${fileBasenameNoExtension}.exe", "${relativeFile}",
+                    "\"${workspaceFolder}\\rawImages.cpp\""
                 ]
             },
             "group": {
@@ -25,6 +27,16 @@
                 "reveal": "never",
                 "focus": false,
                 "panel": "shared"
+            }
+        },
+        {
+            "label": "Hello World",
+            "type": "shell",
+            "linux":{
+                "command": "echo",
+                "args": [
+                    "HolaMundo!"
+                ]
             }
         }
     ]
