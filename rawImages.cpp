@@ -6,7 +6,6 @@
 #include <cstring>
 #include <list>
 
-
 namespace raw{
     typedef unsigned short int pixelValue_t;
 
