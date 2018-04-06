@@ -29,15 +29,5 @@
                 "panel": "shared"
             }
         },
-        {
-            "label": "Hello World",
-            "type": "shell",
-            "linux":{
-                "command": "echo",
-                "args": [
-                    "HolaMundo!"
-                ]
-            }
-        }
     ]
 }
