@@ -41,6 +41,7 @@ namespace raw{
             int size();
 
             void setSaturationValue(pixelValue_t saturation);
+            pixelValue_t getSaturationValue(pixelValue_t);
 
             /// Return the number of saturated Pixels
             int saturatedPixels();

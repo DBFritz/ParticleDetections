@@ -31,6 +31,11 @@ int raw::event_t::size() { return nPixels; }
 void raw::event_t::setSaturationValue(pixelValue_t saturation){
     saturationValue = saturation;
 }
+pixelValue_t raw::event_t::getSaturationValue(pixelValue_t)
+{
+    return saturationValue;
+}
+
 /// Return the number of saturated Pixels
 int raw::event_t::saturatedPixels(){ return saturatedPixels(saturationValue); }
 int raw::event_t::saturatedPixels(pixelValue_t saturation)
