@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     for(int y=5;y<5+3;y++)
         for(int x=3;x<3+3;x++)
             stream[y*width+x] = 1000;
-    stream[6*width+2] = 1000;
+    stream[6*width+2] = 600;
     for(int y=4;y<4+4;y++)
         for(int x=10;x<10+2;x++)
             stream[y*width+x] = 720;
@@ -25,10 +25,12 @@ int main(int argc, char *argv[])
     free(stream);
 
     list<raw::event_t> events = photo.findEvents();
-    for (list<raw::event_t>::iterator it = events.begin(); it != events.end(); it++)    // Esta es la forma de iterar sobre todos 
-        cout << "Carga: " << it->charge() << endl;                                      // los eventos encontrados en una foto. FEA!
+    for (list<raw::event_t>::iterator it = events.begin(); it != events.end(); it++)    // Esta es la forma de iterar sobre todos los eventos encontrados en una foto. FEA!
+    {
+        cout << "Center: (" << it->center<double>().x << ',' << it->center<double>().y << ")\tCarga: " << it->charge() << endl;
+    }
     photo.print(20, 15, false, '\t');
 
 
-   return 0;
+    return 0;
 }
