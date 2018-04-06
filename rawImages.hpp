@@ -115,7 +115,7 @@ namespace raw{
 
             // TODO: Implement
             pixelValue_t median();
-            pixelValue_t median();
+            pixelValue_t mean();
 
             pixelValue_t getSigmaNoice();   // or double (?) or template (?)
             void substractNoice(double nSigmas);
@@ -128,7 +128,7 @@ namespace raw{
             void operator-= (pixelValue_t toAdd);
 
             void toPng(char * path);
-            
+
     };
 
     int rawtoArray(pixelValue_t * array, const char * pathFile, const int width = 2592, const int height = 1944, const int nBadData = 24);
