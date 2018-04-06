@@ -9,6 +9,7 @@
 #include <cstring>
 #include <list>
 #include <cmath>
+#include "vector2d.hpp"
 
 namespace raw{
     typedef unsigned short int pixelValue_t;
@@ -17,12 +18,6 @@ namespace raw{
         unsigned int x;
         unsigned int y;
         pixelValue_t value;
-    };
-
-    template <typename T>
-    struct Vector2D_t {
-        T x;
-        T y;
     };
 
     class event_t

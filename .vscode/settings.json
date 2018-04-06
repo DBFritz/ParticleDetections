@@ -45,7 +45,8 @@
         "cctype": "cpp",
         "clocale": "cpp",
         "cwctype": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "string": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

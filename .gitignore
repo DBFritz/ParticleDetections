@@ -1,8 +1,9 @@
 # Folder for binary files
 bin/
 
-#Folder with data
+#Folder with data and results
 data/
+results/
 
 #Local programs
 local/
