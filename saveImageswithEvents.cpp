@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     for(int f=3; ;f++)      // the first two images are bullsh**
     {
         char pathRaw[64];
-        if (argc>0 && argv[1][strlen(argv[1]-1)]=='/') argv[1][strlen(argv[1]-1)]=='0';
+        if (argc>0 && argv[1][strlen(argv[1])-1]=='/') argv[1][strlen(argv[1])-1]='\0';
         sprintf(pathRaw, "%s/out.%04d.raw", (argc>0 ? argv[1]:"/dev/shm"), f);
         cout << "Intentando con el archivo " << pathRaw << '\r';
 
