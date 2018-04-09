@@ -1,6 +1,5 @@
 #include <iostream>
 #include "rawImages.hpp"
-#include "vec2.hpp"
 
 int main(int argc, char *argv[])
 {
