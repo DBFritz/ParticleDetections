@@ -9,7 +9,7 @@
 #include <cstring>
 #include <list>
 #include <cmath>
-#include "vector2d.hpp"
+#include "vec2.hpp"
 
 namespace raw{
     typedef unsigned short int pixelValue_t;
@@ -45,17 +45,13 @@ namespace raw{
             pixelValue_t getSaturationValue(pixelValue_t);
 
             template <typename R = unsigned short >
-            Vector2D_t<R> center()
+            std::vec2<R> center()
             {
                 long int w = 0;
-                raw::Vector2D_t<R> pos_center = {0,0};
-                for (std::list<monocromePixel_t>::iterator it = pixels.begin(); it != pixels.end(); it++){
-                    pos_center.x += it->x * it->value;
-                    pos_center.y += it->y * it->value;
-                    w += it->value;
-                }
-                pos_center.x /= w;
-                pos_center.y /= w;
+                std::vec2<R> pos_center(0,0);
+                for (std::list<monocromePixel_t>::iterator it = pixels.begin(); it != pixels.end(); w += it->value, it++)
+                    pos_center.set(it->x*it->value + pos_center.x, it->y * it->value + pos_center.y);
+                pos_center /= w;
                 return pos_center;
             }
 

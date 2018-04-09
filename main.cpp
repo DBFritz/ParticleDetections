@@ -1,5 +1,6 @@
 #include <iostream>
 #include "rawImages.hpp"
+#include "vec2.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -27,10 +28,7 @@ int main(int argc, char *argv[])
     list<raw::event_t> events = photo.findEvents();
     for (list<raw::event_t>::iterator it = events.begin(); it != events.end(); it++)    // Esta es la forma de iterar sobre todos los eventos encontrados en una foto. FEA!
     {
-        cout << "Center: (" << it->center<double>().x << ',' << it->center<double>().y << ")\tCarga: " << it->charge() << endl;
+        cout << "Centro en: " << it->center<double>() << "\tCarga: " << it->charge() << "\tPixeles Saturados: " << it->saturatedPixels(1000) << endl;
     }
-    photo.print(20, 15, false, '\t');
-
-
     return 0;
 }

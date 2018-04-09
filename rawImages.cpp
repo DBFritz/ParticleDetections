@@ -3,6 +3,7 @@
 #include <string.h>
 #include <fstream>
 #include <array>
+#include <string>
 #include <cstring>
 #include <list>
 #include <cmath>
@@ -41,7 +42,7 @@ raw::pixelValue_t raw::event_t::getSaturationValue(pixelValue_t)
 int raw::event_t::saturatedPixels(){ return saturatedPixels(saturationValue); }
 int raw::event_t::saturatedPixels(pixelValue_t saturation)
 {
-    int n;
+    int n = 0;
     for (std::list<monocromePixel_t>::iterator it = pixels.begin(); it != pixels.end(); it++)
         if (it->value >= saturation)
             n++;
