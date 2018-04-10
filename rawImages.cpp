@@ -69,6 +69,16 @@ raw::rawPhoto_t::~rawPhoto_t(){
     delete[] data;
 }
 
+raw::rawPhoto_t raw::rawPhoto_t::crop(const unsigned int x_origin, const unsigned int y_origin, const unsigned int width, const unsigned int height)
+{
+    raw::pixelValue_t * stream = new pixelValue_t[width*height];
+    for(unsigned int y=0; y<height; y++)
+        std::memcpy(stream+y*width, data+x_origin+(y_origin+y) * this->width, sizeof(pixelValue_t)*width);
+    raw::rawPhoto_t cropped(width, height, stream);
+    delete[] stream;
+    return cropped;
+}
+
 raw::pixelValue_t raw::rawPhoto_t::getValue(unsigned int x, unsigned int y){
     if (0<=x && x<= width  &&  0<=y && y<=height) return  data[y*width+x];
     return 0;
@@ -78,23 +88,19 @@ raw::pixelValue_t raw::rawPhoto_t::getValue(unsigned int x, unsigned int y){
 raw::pixelValue_t& raw::rawPhoto_t::operator() (int x, int y) { return data[y*width+x]; }
 raw::pixelValue_t& raw::rawPhoto_t::operator[] (int i) { return data[i]; }
 
-void raw::rawPhoto_t::print()                                                    { print(std::cout, width, height, false, '\t'); }
-void raw::rawPhoto_t::print(unsigned int  _width, unsigned int  _height, bool printHeader, char spacer) {print(std::cout,_width,_height,printHeader,spacer); }
-void raw::rawPhoto_t::print(std::ostream output)                                 { print(output, width, height, true, '\t'); }
-void raw::rawPhoto_t::print(std::ostream output, unsigned int  _width, unsigned int  _height)    
-                                                                { print(output, _width, _height, true, '\t'); }
-void raw::rawPhoto_t::print(std::ostream output, bool printHeader)               { print(output, width, height, printHeader, '\t'); }
-void raw::rawPhoto_t::print(std::ostream & output, unsigned int  _width, unsigned int  _height, bool printHeader, char spacer)
+raw::rawPhoto_t& raw::rawPhoto_t::operator=(const raw::rawPhoto_t& photo)
 {
-    if (printHeader)
-        output << _height << 'x' << _width << std::endl;
-    for (unsigned int y=0; y < _height; y++) {
-        for (unsigned int x=0; x<_width; x++)
-            output << data[y*width+x] << spacer;
-        output << std::endl;
-    }
+    width = this->width;
+    height = this->height;
+    data = new raw::pixelValue_t[width*height];
+    std::memcpy(data, this->data, sizeof(raw::pixelValue_t)*width*height);
+    return *this;
 }
-void raw::rawPhoto_t::print(std::ofstream & output, bool printHeader, char spacer)
+
+unsigned int raw::rawPhoto_t::getWidth() { return width; }
+unsigned int raw::rawPhoto_t::getHeight() { return height; }
+
+std::ostream& raw::rawPhoto_t::print(std::ostream& output, bool printHeader, char spacer)
 {
     if (printHeader)
         output << height << 'x' << width << std::endl;
@@ -103,8 +109,21 @@ void raw::rawPhoto_t::print(std::ofstream & output, bool printHeader, char space
             output << data[y*width+x] << spacer;
         output << std::endl;
     }
+    return output;
 }
-            
+
+void raw::rawPhoto_t::toBitMap(const std::string& path)
+{
+    bitmap::bitmap_image output(width, height);
+    for (unsigned int y=0; y<height; y++)
+        for (unsigned int x=0; x<width; x++)
+            output.set_pixel(x,y, 
+                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/saturationValue,
+                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/saturationValue,
+                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/saturationValue);
+    output.save_image(path);
+}
+
 bool raw::rawPhoto_t::isAdjacent(int x_1, int y_1, int x_2, int y_2){
     return ((x_1-1==x_1 || x_1==x_2 || x_1+1==x_2) && (y_1-1==y_2 || y_1==y_2 || y_1+1==y_2));
 }

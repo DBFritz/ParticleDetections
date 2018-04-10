@@ -46,7 +46,8 @@
         "clocale": "cpp",
         "cwctype": "cpp",
         "chrono": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "vector": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

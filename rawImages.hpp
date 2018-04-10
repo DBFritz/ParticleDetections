@@ -10,6 +10,7 @@
 #include <list>
 #include <cmath>
 #include "vec2.hpp"
+#include "bitmap_image.hpp"
 
 namespace raw{
     typedef unsigned short int pixelValue_t;
@@ -80,23 +81,25 @@ namespace raw{
             rawPhoto_t(unsigned int _width, unsigned int _height, pixelValue_t *stream);
             ~rawPhoto_t();
 
+            rawPhoto_t crop(const unsigned int x_origin,  const unsigned int y_origin, const unsigned int width, const unsigned int height);
+            
             pixelValue_t getValue(unsigned int x, unsigned int y);
 
             // TODO: NO VALIDA
             pixelValue_t& operator() (int x, int y);
             pixelValue_t& operator[] (int i);
 
+            rawPhoto_t& operator=(const rawPhoto_t& photo);
+
+            unsigned int getWidth();
+            unsigned int getHeight();
             /// TODO: Poner bien esto, es un pedo.
             /// Instead of printing, I could overlad de << operator. Much better!
-            void print();
-            void print(unsigned int  _width, unsigned int  _height, bool printHeader, char spacer);
-            void print(std::ostream output);
-            void print(std::ostream output, unsigned int  _width, unsigned int  _height);
-            void print(std::ostream output, bool printHeader);
-            void print(std::ostream & output, unsigned int  _width, unsigned int  _height, bool printHeader, char spacer);
-            void print(std::ofstream & output, bool printHeader, char spacer);
+            std::ostream& print(std::ostream& output = std::cout, bool printHeader = false, char spacer = '\t');
 
-            size_t toBitMap(); //TODO
+            friend std::ostream& operator<<(std::ostream &os, raw::rawPhoto_t photo);
+
+            void toBitMap(const std::string& path);
 
             void toHistogram(int *toFill);
             std::list<event_t> findEvents(pixelValue_t threshold = maxValue/2);
@@ -123,5 +126,16 @@ namespace raw{
     };
 
     int rawtoArray(pixelValue_t * array, const char * pathFile, const int width = 2592, const int height = 1944, const int nBadData = 24);
+
+    inline std::ostream& operator<<(std::ostream &os, raw::rawPhoto_t photo)
+    {
+        for (unsigned int y=0; y < photo.height; y++) {
+            for (unsigned int x=0; x<photo.width; x++)
+                os << photo.data[y*photo.width+x] << '\t';
+            os << std::endl;
+        }
+        return os;
+    }
 }
+
 #endif

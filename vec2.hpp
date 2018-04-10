@@ -141,7 +141,7 @@ namespace std {
 	typedef vec2<double> vec2d;
 
 	template <class T>
-	ostream &operator<<(ostream &os, const std::vec2<T>& vec)
+	ostream& operator<<(ostream &os, const std::vec2<T>& vec)
 	{
 		os << '(' << vec.x << ',' << vec.y << ')';
 		return os;
