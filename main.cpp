@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     {
         cout << "Centro en: " << it->center<double>() << "\tCarga: " << it->charge() << "\tPixeles Saturados: " << it->saturatedPixels(1000) << endl;
     }
-    photo.crop(0,0,20,15).toBitMap("output.bmp");
+    photo.crop(0,0,20,15).toBitMap_grayscale("output.bmp");
 
     cout << photo.crop(0,0,14,10);
     return 0;

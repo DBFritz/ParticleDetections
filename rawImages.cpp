@@ -85,7 +85,9 @@ raw::pixelValue_t raw::rawPhoto_t::getValue(unsigned int x, unsigned int y){
 }
 
 // TODO: NO VALIDA que exista
-raw::pixelValue_t& raw::rawPhoto_t::operator() (int x, int y) { return data[y*width+x]; }
+raw::pixelValue_t& raw::rawPhoto_t::operator() (int x, int y) {
+    return data[y*width+x]; 
+    }
 raw::pixelValue_t& raw::rawPhoto_t::operator[] (int i) { return data[i]; }
 
 raw::rawPhoto_t& raw::rawPhoto_t::operator=(const raw::rawPhoto_t& photo)
@@ -113,6 +115,11 @@ std::ostream& raw::rawPhoto_t::print(std::ostream& output, bool printHeader, cha
 }
 
 void raw::rawPhoto_t::toBitMap(const std::string& path)
+{
+    // TODO: COMPLETAR para exportar la imagen en color.
+}
+
+void raw::rawPhoto_t::toBitMap_grayscale(const std::string& path)
 {
     bitmap::bitmap_image output(width, height);
     for (unsigned int y=0; y<height; y++)
