@@ -101,6 +101,7 @@ namespace raw{
 
             void toBitMap(const std::string& path);
             void toBitMap_grayscale(const std::string& path);
+            void toBitMap_grayscale(const std::string& path, pixelValue_t maxValue);
 
             void toHistogram(int *toFill);
             std::list<event_t> findEvents(pixelValue_t threshold = maxValue/2);

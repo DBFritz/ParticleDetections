@@ -119,15 +119,16 @@ void raw::rawPhoto_t::toBitMap(const std::string& path)
     // TODO: COMPLETAR para exportar la imagen en color.
 }
 
-void raw::rawPhoto_t::toBitMap_grayscale(const std::string& path)
+void raw::rawPhoto_t::toBitMap_grayscale(const std::string& path) { toBitMap_grayscale(path, saturationValue); }
+void raw::rawPhoto_t::toBitMap_grayscale(const std::string& path, raw::pixelValue_t maxValue)
 {
     bitmap::bitmap_image output(width, height);
     for (unsigned int y=0; y<height; y++)
         for (unsigned int x=0; x<width; x++)
             output.set_pixel(x,y, 
-                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/saturationValue,
-                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/saturationValue,
-                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/saturationValue);
+                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/maxValue,
+                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/maxValue,
+                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/maxValue);
     output.save_image(path);
 }
 
