@@ -16,7 +16,6 @@ void raw::event_t::addPixel(unsigned int x, unsigned int y, pixelValue_t value)
     nPixels++;
 }
 
-raw::pixelValue_t raw::event_t::getSaturationValue(){ return saturationValue; }
 
 /// Ask if the pixel with coordinates (x,y) is in the Event
 bool raw::event_t::isHere(unsigned int x, unsigned int y)
@@ -26,16 +25,28 @@ bool raw::event_t::isHere(unsigned int x, unsigned int y)
     return false;
 }
 
-/// Return the size of the event
-int raw::event_t::size() { return nPixels; }
+unsigned int raw::event_t::size() { return nPixels; }
+
+double raw::event_t::center_sigma()
+{
+    std::vec2<double> med = center<double>();
+    double variance = 0;
+    double totalWeight = 0;
+    for (std::list<monocromePixel_t>::iterator it = pixels.begin(); it != pixels.end(); it++)
+    {
+        std::vec2<double> xi(it->x, it->y);
+        std::vec2<double> diff = xi-med;
+        variance += std::vec2<double>::dot(diff,diff) * it->value;
+        totalWeight+= it->value;
+    }
+    variance /= (nPixels-1)*totalWeight/nPixels;
+    return sqrt(variance);
+}
 
 void raw::event_t::setSaturationValue(pixelValue_t saturation){
     saturationValue = saturation;
 }
-raw::pixelValue_t raw::event_t::getSaturationValue(pixelValue_t)
-{
-    return saturationValue;
-}
+raw::pixelValue_t raw::event_t::getSaturationValue(){ return saturationValue; }
 
 
 /// Return the number of saturated Pixels
@@ -59,6 +70,11 @@ long int raw::event_t::charge()
 }
 
 /// Constructor: from a linear stream it cut it and put it in a rawPhoto_t
+raw::rawPhoto_t::rawPhoto_t(unsigned int _width, unsigned int _height): width(_width), height(_height)
+{
+    data = new pixelValue_t[width*height];
+    std::fill_n(data, width*height, 0);
+}
 raw::rawPhoto_t::rawPhoto_t(unsigned int _width, unsigned int _height, pixelValue_t *stream): width(_width), height(_height)
 {
     data = new pixelValue_t[width*height];
@@ -69,6 +85,10 @@ raw::rawPhoto_t::~rawPhoto_t(){
     delete[] data;
 }
 
+raw::rawPhoto_t raw::rawPhoto_t::crop(std::vec2<double> center, double width, double height)
+{
+    return crop(center.x - width/2, center.y - height/2, width, height);
+}
 raw::rawPhoto_t raw::rawPhoto_t::crop(const unsigned int x_origin, const unsigned int y_origin, const unsigned int width, const unsigned int height)
 {
     raw::pixelValue_t * stream = new pixelValue_t[width*height];
@@ -150,18 +170,18 @@ int raw::rawPhoto_t::recursiveAddingto(event_t * event, int x, int y, pixelValue
     if (getValue(x,y)<threshold) return 0;
     event->addPixel(x,y, getValue(x,y));
     data[y*width+x] = 0; //Apago el pixel para que no lo vuelva a contar
-    return 1+recursiveAddingto(event, x+1, y, threshold)+
-            recursiveAddingto(event, x, y+1, threshold)+
-            recursiveAddingto(event, x-1, y, threshold)+
-            recursiveAddingto(event, x, y-1, threshold);
+    return 1+recursiveAddingto(event, x+1, y, threshold)+   recursiveAddingto(event, x+1, y+1, threshold)+
+            recursiveAddingto(event, x, y+1, threshold)+    recursiveAddingto(event, x-1, y+1, threshold)+
+            recursiveAddingto(event, x-1, y, threshold)+    recursiveAddingto(event, x-1, y-1, threshold)+
+            recursiveAddingto(event, x, y-1, threshold)+    recursiveAddingto(event, x+1, y-1, threshold);
 }
 
-std::list<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t threshold)
+std::list<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixelValue_t threshold)
 {
     std::list<raw::event_t> events;
     for (unsigned int y=0; y<height; y++)
         for(unsigned int x=0; x<width; x++)
-            if ( (*this)(x,y)>threshold)
+            if ( (*this)(x,y)>trigger)
             {
                 raw::event_t event;
                 recursiveAddingto(&event,x,y,threshold);
@@ -173,7 +193,21 @@ std::list<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t threshold)
     return events;
 }
 
-int raw::rawtoArray(pixelValue_t * array, const char * pathFile, const int width, const int height, const int nBadData)
+raw::rawPhoto_t raspiraw_to_rawPhoto(const std::string pathFile, const int width, const int height, const int nBadData)
+{
+    raw::pixelValue_t *stream = new raw::pixelValue_t[height*width];
+    if (stream == NULL){
+        std::cerr << "Error allocating memory" << std::endl;
+        return raw::rawPhoto_t(width,height);
+    }
+    if ( raw::raspirawtoArray(stream, pathFile, width, height, nBadData) ) return raw::rawPhoto_t(width,height);
+    raw::rawPhoto_t photo(width, height, stream);
+    delete[] stream;
+
+    return photo;
+}
+
+int raw::raspirawtoArray(pixelValue_t * array, const std::string pathFile, const int width, const int height, const int nBadData)
 {
     std::ifstream input(pathFile);
     if (!input.good()){
@@ -220,7 +254,7 @@ int main(int argc, char *argv[])
         cerr << "Error allocating memory" << endl;
         return -1;
     }
-    if (raw::rawtoArray(stream, path, width, height)) return 0;
+    if (raw::raspirawtoArray(stream, path, width, height)) return 0;
     using namespace raw;
     rawPhoto_t rawPhoto(width, height, stream);
     free(stream);
@@ -262,7 +296,7 @@ int main(int argc, char *argv[])
             return -1;
         }
 
-        if (raw::rawtoArray(stream, path, width, height)) return 0;
+        if (raw::raspirawtoArray(stream, path, width, height)) return 0;
 
         using namespace raw;
         rawPhoto_t rawPhoto(width, height, stream);

@@ -34,16 +34,18 @@ namespace raw{
             /// Push back a new pixel
             void addPixel(unsigned int x, unsigned int y, pixelValue_t value);
 
-            pixelValue_t getSaturationValue();
+            
 
             /// Ask if the pixel with coordinates (x,y) is in the Event
             bool isHere(unsigned int x, unsigned int y);
 
-            /// Return the size of the event
-            int size();
-
-            void setSaturationValue(pixelValue_t saturation);
-            pixelValue_t getSaturationValue(pixelValue_t);
+            /// Return the number of pixels of the event
+            unsigned int size();
+            
+            // Return the standard deviation of the event. i.e. the spread of the event
+            // It uses the WEIGHTED STANDARD DEVIATION of all points in a event.
+            // more information in: https://www.itl.nist.gov/div898/software/dataplot/refman2/ch2/weightsd.pdf
+            double center_sigma();
 
             template <typename R = unsigned short >
             std::vec2<R> center()
@@ -55,6 +57,9 @@ namespace raw{
                 pos_center /= w;
                 return pos_center;
             }
+
+            void setSaturationValue(pixelValue_t saturation);
+            pixelValue_t getSaturationValue();
 
             /// Return the number of saturated Pixels
             int saturatedPixels();
@@ -77,10 +82,14 @@ namespace raw{
         
         public:
             static const int maxValue{1024-1};
-            /// Constructor: from a linear stream it cut it and put it in a rawPhoto_t
+            /// Constructors:
+            // Photo with all pixels set in 0
+            rawPhoto_t(unsigned int _width, unsigned int _height);
+            // Photo with the pixels from the stream array
             rawPhoto_t(unsigned int _width, unsigned int _height, pixelValue_t *stream);
             ~rawPhoto_t();
 
+            rawPhoto_t crop(std::vec2<double> center, double width, double height);
             rawPhoto_t crop(const unsigned int x_origin,  const unsigned int y_origin, const unsigned int width, const unsigned int height);
             
             pixelValue_t getValue(unsigned int x, unsigned int y);
@@ -105,6 +114,7 @@ namespace raw{
 
             void toHistogram(int *toFill);
             std::list<event_t> findEvents(pixelValue_t threshold = maxValue/2);
+            std::list<event_t> findEvents(pixelValue_t trigger, pixelValue_t threshold);
 
 
             // ¿Cómo distingo entre canales?        ///
@@ -127,7 +137,8 @@ namespace raw{
 
     };
 
-    int rawtoArray(pixelValue_t * array, const char * pathFile, const int width = 2592, const int height = 1944, const int nBadData = 24);
+    raw::rawPhoto_t raspiraw_to_rawPhoto(const std::string pathFile, const int width = 2592, const int height = 1944, const int nBadData = 24);
+    int raspirawtoArray(pixelValue_t * array, const std::string pathFile, const int width = 2592, const int height = 1944, const int nBadData = 24);
 
     inline std::ostream& operator<<(std::ostream &os, raw::rawPhoto_t photo)
     {

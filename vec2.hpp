@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <cmath>
-#define M_PI (3.14159265358979323846264338327950288)
+#define MATH_PI (3.14159265358979323846264338327950288)
 
 namespace std {
 	using std::ostream;
@@ -96,7 +96,7 @@ namespace std {
 		friend ostream &operator<< <>(ostream &os, const vec2& vec);
 
 		void rotate(double deg) {
-			double theta = deg / 180.0 * M_PI;
+			double theta = deg / 180.0 * MATH_PI;
 			double c = cos(theta);
 			double s = sin(theta);
 			double tx = x * c - y * s;
