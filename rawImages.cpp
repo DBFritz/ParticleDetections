@@ -8,6 +8,8 @@
 #include <list>
 #include <cmath>
 #include "rawImages.hpp"
+#include "vec2.hpp"
+#include "bitmap_image.hpp"
 
 void raw::event_t::addPixel(unsigned int x, unsigned int y, pixelValue_t value)
 {
@@ -85,6 +87,19 @@ raw::rawPhoto_t::~rawPhoto_t(){
     delete[] data;
 }
 
+bool raw::rawPhoto_t::raspiraw(const char * filename, const int nBadData)
+{
+    raw::pixelValue_t *stream = new raw::pixelValue_t[height*width];
+    if (raw::raspirawtoArray(stream, filename, width, height, nBadData))
+    {
+        std::fill_n(data, width*height, 0);
+        return false;
+    }
+    std::memcpy(data, stream, sizeof(pixelValue_t)*width*height);
+    delete[] stream;
+    return true;
+}
+
 raw::rawPhoto_t raw::rawPhoto_t::crop(std::vec2<double> center, double width, double height)
 {
     return crop(center.x - width/2, center.y - height/2, width, height);
@@ -117,6 +132,14 @@ raw::rawPhoto_t& raw::rawPhoto_t::operator=(const raw::rawPhoto_t& photo)
     data = new raw::pixelValue_t[width*height];
     std::memcpy(data, this->data, sizeof(raw::pixelValue_t)*width*height);
     return *this;
+}
+
+bool raw::rawPhoto_t::isEmpty()
+{
+    for (unsigned int y=0; y < height; y++) 
+        for (unsigned int x=0; x<width; x++)
+            if (getValue(x,y) != 0) return false;
+    return true;
 }
 
 unsigned int raw::rawPhoto_t::getWidth() { return width; }
@@ -176,6 +199,9 @@ int raw::rawPhoto_t::recursiveAddingto(event_t * event, int x, int y, pixelValue
             recursiveAddingto(event, x, y-1, threshold)+    recursiveAddingto(event, x+1, y-1, threshold);
 }
 
+std::list<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger) {
+    return findEvents(trigger,trigger);
+}
 std::list<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixelValue_t threshold)
 {
     std::list<raw::event_t> events;
@@ -193,28 +219,17 @@ std::list<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixelV
     return events;
 }
 
-raw::rawPhoto_t raspiraw_to_rawPhoto(const std::string pathFile, const int width, const int height, const int nBadData)
-{
-    raw::pixelValue_t *stream = new raw::pixelValue_t[height*width];
-    if (stream == NULL){
-        std::cerr << "Error allocating memory" << std::endl;
-        return raw::rawPhoto_t(width,height);
-    }
-    if ( raw::raspirawtoArray(stream, pathFile, width, height, nBadData) ) return raw::rawPhoto_t(width,height);
-    raw::rawPhoto_t photo(width, height, stream);
-    delete[] stream;
+//raw::rawPhoto_t raspiraw_to_rawPhoto(const std::string pathFile, const int width, const int height, const int nBadData){
+//    return raspiraw_to_rawPhoto(pathFile.c_str(), width, height, nBadData);
+//}
 
-    return photo;
-}
-
-int raw::raspirawtoArray(pixelValue_t * array, const std::string pathFile, const int width, const int height, const int nBadData)
+int raw::raspirawtoArray(pixelValue_t * array, const char * pathFile, const int width, const int height, const int nBadData)
 {
     std::ifstream input(pathFile);
     if (!input.good()){
         std::cerr << "Couldn't open " << pathFile << std::endl;
         return -2;
     }
-    std::cerr << pathFile << std::endl;
 
     // Horizontally, each row consists of 10-bit values. Every four bytes are
     // the high 8-bits of four values, and the 5th byte contains the packed low
