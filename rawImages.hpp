@@ -14,6 +14,7 @@
 
 namespace raw{
     typedef unsigned short int pixelValue_t;
+    typedef std::vector<unsigned int> histogram_t;
 
     struct monocromePixel_t {
         unsigned int x;
@@ -63,8 +64,8 @@ namespace raw{
                 return pos_center;
             }
 
-            void setSaturationValue(pixelValue_t saturation);
-            pixelValue_t getSaturationValue();
+            void setSaturationValue(pixelValue_t saturation) { saturationValue = saturation; }
+            pixelValue_t getSaturationValue() { return saturationValue; }
 
             /// Return the number of saturated Pixels
             int saturatedPixels();
@@ -73,6 +74,8 @@ namespace raw{
             /// Return the total charge of the event
             long int charge();
     };
+
+    typedef std::vector<event_t> event_vec_t;
 
     class rawPhoto_t
     {
@@ -110,6 +113,10 @@ namespace raw{
 
             unsigned int getWidth();
             unsigned int getHeight();
+
+            void setSaturationValue(pixelValue_t saturation) { saturationValue = saturation; }
+            pixelValue_t getSaturationValue() { return saturationValue; }
+
             /// TODO: Poner bien esto, es un pedo.
             /// Instead of printing, I could overlad de << operator. Much better!
             std::ostream& print(std::ostream& output = std::cout, bool printHeader = false, char spacer = '\t');
@@ -120,18 +127,16 @@ namespace raw{
             void toBitMap_grayscale(const std::string& path);
             void toBitMap_grayscale(const std::string& path, pixelValue_t maxValue);
 
-            void toHistogram(int *toFill);
-            std::list<event_t> findEvents(pixelValue_t trigger = maxValue/2);
-            std::list<event_t> findEvents(pixelValue_t trigger, pixelValue_t threshold);
-
-
-            // ¿Cómo distingo entre canales?        ///
+            std::vector<unsigned int> toHistogram();
+            std::vector<event_t> findEvents(pixelValue_t trigger = maxValue/2);
+            std::vector<event_t> findEvents(pixelValue_t trigger, pixelValue_t threshold);
 
             // TODO: Implement
             pixelValue_t median();
-            pixelValue_t mean();
+            double mean();
+            pixelValue_t mostFreqValue();
 
-            pixelValue_t getSigmaNoice();   // or double (?) or template (?)
+            double sigma_neg();   // or double (?) or template (?)
             void substractNoice(double nSigmas);
             void gain(double);
 

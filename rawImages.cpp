@@ -7,6 +7,7 @@
 #include <cstring>
 #include <list>
 #include <cmath>
+#include <numeric>
 #include "rawImages.hpp"
 #include "vec2.hpp"
 #include "bitmap_image.hpp"
@@ -45,10 +46,6 @@ double raw::event_t::center_sigma()
     return sqrt(variance);
 }
 
-void raw::event_t::setSaturationValue(pixelValue_t saturation){
-    saturationValue = saturation;
-}
-raw::pixelValue_t raw::event_t::getSaturationValue(){ return saturationValue; }
 
 
 /// Return the number of saturated Pixels
@@ -70,6 +67,11 @@ long int raw::event_t::charge()
         charge += it->value;
     return charge;
 }
+
+
+
+
+
 
 /// Constructor: from a linear stream it cut it and put it in a rawPhoto_t
 raw::rawPhoto_t::rawPhoto_t(unsigned int _width, unsigned int _height): width(_width), height(_height)
@@ -180,12 +182,15 @@ bool raw::rawPhoto_t::isAdjacent(int x_1, int y_1, int x_2, int y_2){
 }
             
 
-void raw::rawPhoto_t::toHistogram(int *toFill)
+std::vector<unsigned int>raw::rawPhoto_t::toHistogram()
 {
-    for(pixelValue_t i=0; i<saturationValue; i++) toFill[(int)std::floor(i)]=0;
+    std::vector<unsigned int> toFill;
+    toFill.resize(saturationValue+1);
+    //for(pixelValue_t i=0; i<=saturationValue; i++) toFill[(int)std::floor(i)]=0;
     for (unsigned int y=0; y<height; y++)
         for(unsigned int x=0; x<width; x++)
             ++toFill[(int)std::floor(data[y*width+x])];
+    return toFill;
 }
 
 int raw::rawPhoto_t::recursiveAddingto(event_t * event, int x, int y, pixelValue_t threshold)
@@ -199,10 +204,10 @@ int raw::rawPhoto_t::recursiveAddingto(event_t * event, int x, int y, pixelValue
             recursiveAddingto(event, x, y-1, threshold)+    recursiveAddingto(event, x+1, y-1, threshold);
 }
 
-std::list<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger) {
+std::vector<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger) {
     return findEvents(trigger,trigger);
 }
-std::list<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixelValue_t threshold)
+std::vector<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixelValue_t threshold)
 {
     std::list<raw::event_t> events;
     for (unsigned int y=0; y<height; y++)
@@ -216,12 +221,47 @@ std::list<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixelV
     for (std::list<raw::event_t>::iterator itEvent = events.begin(); itEvent != events.end(); itEvent++)  // para todos los eventos encontrados
         for (std::list<monocromePixel_t>::iterator itPix = itEvent->pixels.begin(); itPix != itEvent->pixels.end(); itPix++)
             data[itPix->y * width + itPix->x] = itPix->value;
-    return events;
+    return std::vector<raw::event_t>( std::begin(events), std::end(events) );
 }
 
-//raw::rawPhoto_t raspiraw_to_rawPhoto(const std::string pathFile, const int width, const int height, const int nBadData){
-//    return raspiraw_to_rawPhoto(pathFile.c_str(), width, height, nBadData);
-//}
+double raw::rawPhoto_t::mean()
+{
+    double sum = 0;
+    for (unsigned int y=0; y<height; y++)
+        for(unsigned int x=0; x<width; x++)
+            sum += getValue(x,y);
+    return sum/(width*height);
+}
+
+raw::pixelValue_t raw::rawPhoto_t::mostFreqValue()
+{
+    std::vector<unsigned int> histogram = toHistogram();
+    pixelValue_t most=0;
+    for (pixelValue_t i = 1; i < saturationValue; i++)
+        if ( histogram[i] > histogram[most])
+            most = i;
+    return most;
+}
+
+// Compute the sigma using the values that are less than the mostFrequentValue;
+double raw::rawPhoto_t::sigma_neg() {
+    std::vector<unsigned int> histogram = toHistogram();
+    pixelValue_t most=0;
+    for (pixelValue_t i = 1; i < saturationValue; i++)
+        if ( histogram[i] > histogram[most])
+            most = i;
+
+    double variance = 0;
+    long sumHisto = 0;
+    int m=0;
+    for(pixelValue_t i=most-1; i > 0; i++) {
+        variance += (most-i)*(most-i) * histogram[i];
+        if (histogram[i] != 0) m++;
+        sumHisto += histogram[i];
+    }
+    return sqrt(m * variance / ( sumHisto * (m-1) ));
+}
+
 
 int raw::raspirawtoArray(pixelValue_t * array, const char * pathFile, const int width, const int height, const int nBadData)
 {

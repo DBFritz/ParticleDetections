@@ -17,11 +17,13 @@ int main(int argc, char *argv[])
         for(int x=10;x<10+2;x++)
             photo(x,y) = 720;
     
-
-    list<raw::event_t> events = photo.findEvents();
-    for (list<raw::event_t>::iterator it = events.begin(); it != events.end(); it++)    // Esta es la forma de iterar sobre todos los eventos encontrados en una foto. FEA!
+    raw::event_vec_t events = photo.findEvents();
+    for (unsigned int i; i < events.size(); i++)    // Esta es la forma de iterar sobre todos los eventos encontrados en una foto. FEA!
     {
-        cout << "Centro en: " << it->center<double>() << "\tancho:" << it->center_sigma() << "\tCarga: " << it->charge() << "\tPixeles Saturados: " << it->saturatedPixels(1000) << endl;
+        cout << "Centro en: " << events[i].center<double>()
+            << "\tancho:" << events[i].center_sigma()
+            << "\tCarga: " << events[i].charge()
+            << "\tPixeles Saturados: " << events[i].saturatedPixels(1000) << endl;
     }
     photo.crop(0,0,20,15).toBitMap_grayscale("output.bmp");
 

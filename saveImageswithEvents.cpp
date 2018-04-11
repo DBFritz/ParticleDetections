@@ -15,14 +15,15 @@ int main(int argc, char *argv[])
     for(int f=3; ;f++)      // the first two images are bullsh**
     {
         char pathRaw[64];
-        sprintf(pathRaw, "/home/fritz/PiSHM/out.%04d.raw", f);
+        if (argc>0 && argv[1][strlen(argv[1])-1]=='/') argv[1][strlen(argv[1])-1]='\0';
+        sprintf(pathRaw, "%s/out.%04d.raw", (argc>0 ? argv[1]:"/dev/shm"), f);
         cout << "Intentando con el archivo " << pathRaw << '\r' << flush;
         cout << "                                                              \r";
 
         photo.raspiraw(pathRaw);
         if ( photo.isEmpty() ) break;
 
-        list<event_t> events = photo.findEvents(trigger, threshold);
+        event_vec_t events = photo.findEvents(trigger, threshold);
         if (!events.empty())
         {
             char the_path[128] = "\0";
@@ -39,14 +40,14 @@ int main(int argc, char *argv[])
 
             photo.print(output, false, '\t');
             output.close();
-            for (list<event_t>::iterator it = events.begin(); it != events.end(); it++)
+            for (unsigned int i=0; i < events.size(); i++)
             {
-                cout << "Center: " << it->center() 
-                    << "\tSigma: " << it->center_sigma()
-                    << "\tTamaño:" << it->size()
-                    << "\tCharge = " << it->charge() << endl;
+                cout << "Center: " << events[i].center() 
+                    << "\tSigma: " << events[i].center_sigma()
+                    << "\tTamaño:" << events[i].size()
+                    << "\tCharge = " << events[i].charge() << endl;
                 strftime(the_path, 128, "./results/%F_%H-%M-%S.%Z.bmp", gmtime(&now));
-                photo.crop(it->center<double>(), 60, 60).toBitMap_grayscale(the_path);
+                photo.crop(events[i].center<double>(), 60, 60).toBitMap_grayscale(the_path);
             }
 
         }
