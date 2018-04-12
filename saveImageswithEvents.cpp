@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
                     << "\tCharge = " << events[i].charge() << endl;
                 strftime(the_path, 128, "./results/%F_%H-%M-%S_.%Z", gmtime(&now));
                 sprintf(the_path, "%s.%03d.bmp", the_path, i);
-                photo.crop(events[i].center<double>(), 60, 60).toBitMap_grayscale(the_path);
+                photo.crop(events[i].center(), 60, 60).toBitMap_grayscale(the_path);
             }
 
         }

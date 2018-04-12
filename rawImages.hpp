@@ -98,8 +98,8 @@ namespace raw{
             ~rawPhoto_t();
 
             bool raspiraw(const char * filename, const int nBadData = 24);
-            rawPhoto_t crop(std::vec2<double> center, double width, double height);
-            rawPhoto_t crop(const unsigned int x_origin,  const unsigned int y_origin, const unsigned int width, const unsigned int height);
+            rawPhoto_t crop(const std::vec2<short int> center, int width, int height);
+            rawPhoto_t crop(const unsigned int x_origin,  const unsigned int y_origin, unsigned int width, unsigned int height);
             
             pixelValue_t getValue(unsigned int x, unsigned int y);
 
