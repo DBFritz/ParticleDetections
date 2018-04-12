@@ -182,7 +182,7 @@ bool raw::rawPhoto_t::isAdjacent(int x_1, int y_1, int x_2, int y_2){
 }
             
 
-std::vector<unsigned int>raw::rawPhoto_t::toHistogram()
+std::vector<unsigned int> raw::rawPhoto_t::toHistogram()
 {
     std::vector<unsigned int> toFill;
     toFill.resize(saturationValue+1);
