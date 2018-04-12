@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
             photo(x,y) = 256;
     
     raw::event_vec_t events = photo.findEvents(250,100);
-    for (unsigned int i; i < events.size(); i++)    // Esta es la forma de iterar sobre todos los eventos encontrados en una foto. FEA!
+    for (unsigned int i; i < events.size(); i++) 
     {
         cout << "Centro en: " << events[i].center<double>()
             << "\tancho:" << events[i].center_sigma()
