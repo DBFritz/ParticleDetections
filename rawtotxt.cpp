@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     switch (argc)
     {
         case 1:
-            for(int f=0; ;f++)      // the first two images are bullsh**
+            for(int f=1; ;f++)      // the first two images are bullsh**
             {
                 char pathRaw[64];
                 char pathTxt[64];
