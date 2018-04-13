@@ -102,12 +102,15 @@ bool raw::rawPhoto_t::raspiraw(const char * filename, const int nBadData)
     return true;
 }
 
-raw::rawPhoto_t raw::rawPhoto_t::crop(std::vec2<double> center, double width, double height)
+raw::rawPhoto_t raw::rawPhoto_t::crop(std::vec2<short int> center, int width, int height)
 {
-    return crop(center.x - width/2, center.y - height/2, width, height);
+    return crop((center.x - width/2  >= 0)? center.x - width/2  : 0,
+                (center.y - height/2 >= 0)? center.y - height/2 : 0, width, height);
 }
-raw::rawPhoto_t raw::rawPhoto_t::crop(const unsigned int x_origin, const unsigned int y_origin, const unsigned int width, const unsigned int height)
+raw::rawPhoto_t raw::rawPhoto_t::crop(const unsigned int x_origin, const unsigned int y_origin, unsigned int width, unsigned int height)
 {
+    if ( width+x_origin  > getWidth()  )    width  = getWidth()  - x_origin;
+    if ( height+y_origin > getHeight() )    height = getHeight() - y_origin;
     raw::pixelValue_t * stream = new pixelValue_t[width*height];
     for(unsigned int y=0; y<height; y++)
         std::memcpy(stream+y*width, data+x_origin+(y_origin+y) * this->width, sizeof(pixelValue_t)*width);
