@@ -7,15 +7,13 @@
             "linux": {
                 "command": "g++",
                 "args": [
-                    "-g", "-Wall", "-std=c++11", "-o", "bin/${fileBasenameNoExtension}", "'${file}'",
-                    "'${workspaceFolder}/rawImages.cpp'"
+                    "-g", "-Wall", "-std=c++11", "-o", "bin/${fileBasenameNoExtension}", "'${file}'"
                 ],
             },
             "windows": {
                 "command": "g++",
                 "args": [
-                    "-g", "-Wall", "-std=c++11", "-o", ".\\bin\\${fileBasenameNoExtension}.exe", "${relativeFile}",
-                    "'${workspaceFolder}\\rawImages.cpp'"
+                    "-g", "-Wall", "-std=c++11", "-o", ".\\bin\\${fileBasenameNoExtension}.exe", "${relativeFile}"
                 ]
             },
             "group": {
