@@ -131,7 +131,7 @@ bool raw::rawPhoto_t::raspiraw(const char * filename, const int nBadData)
     return true;
 }
 
-raw::rawPhoto_t raw::rawPhoto_t::crop(std::vec2<double> center, double width, double height)
+raw::rawPhoto_t raw::rawPhoto_t::crop(std::vec2<short> center, int width, int height)
 {
     return crop(center.x - width/2, center.y - height/2, width, height);
 }

@@ -12,7 +12,7 @@
 #include "vec2.hpp"
 #include "bitmap_image.hpp"
 #include "rawEvent.hpp"
-# include "rawImages.hpp"
+#include "rawImages.hpp"
 
 namespace raw {
     typedef unsigned short int pixelValue_t;
