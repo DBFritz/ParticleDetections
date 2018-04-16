@@ -86,6 +86,8 @@ namespace raw{
             void operator+= (pixelValue_t toAdd);
             void operator-= (pixelValue_t toAdd);
 
+            //TODO: overload this function
+            rawPhoto_t operator+(rawPhoto_t toAdd);
     };
 
     int raspirawtoArray(pixelValue_t * array, const char * pathFile, const int width = 2592, const int height = 1944, const int nBadData = 24);
@@ -146,7 +148,7 @@ raw::rawPhoto_t raw::rawPhoto_t::crop(const unsigned int x_origin, const unsigne
 }
 
 raw::pixelValue_t raw::rawPhoto_t::getValue(unsigned int x, unsigned int y){
-    if (0<=x && x<= width  &&  0<=y && y<=height) return  data[y*width+x];
+    if (0<=x && x< width  &&  0<y && y<=height) return  data[y*width+x];
     return 0;
 }
 
@@ -224,7 +226,7 @@ std::vector<unsigned int> raw::rawPhoto_t::toHistogram()
 
 int raw::rawPhoto_t::recursiveAddingto(event_t * event, int x, int y, pixelValue_t threshold)
 {
-    if (getValue(x,y)<threshold) return 0;
+    if (getValue(x,y)<threshold || x < 0 || width <= (unsigned)x || y < 0 || height <= (unsigned)y ) return 0;
     event->addPixel(x,y, getValue(x,y));
     data[y*width+x] = 0; //Apago el pixel para que no lo vuelva a contar
     return 1+recursiveAddingto(event, x+1, y, threshold)+   recursiveAddingto(event, x+1, y+1, threshold)+

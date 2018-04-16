@@ -36,6 +36,8 @@ namespace raw {
             /// Push back a new pixel
             void addPixel(unsigned int x, unsigned int y, pixelValue_t value);
 
+            
+
             /// Ask if the pixel with coordinates (x,y) is in the Event
             bool isHere(unsigned int x, unsigned int y);
 
