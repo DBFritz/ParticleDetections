@@ -11,7 +11,7 @@ using namespace raw;
 using namespace std;
 
 const int width=2592, height=1944;
-pixelValue_t trigger=1036, threshold= 50;
+pixelValue_t trigger=100, threshold= 50;
 
 int main (int argc, char * argv[])
 {

@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
 
                 photo.raspiraw(pathRaw);
                 if (photo.isEmpty()) return 0;
+                if (!photo.isValid()) cerr << "Hay un pixel mas grande de lo que deberia" << endl;
 
                 ofstream output(pathTxt);
                 if ( !output.is_open() ) {
@@ -42,6 +43,8 @@ int main(int argc, char *argv[])
             if ( photo.isEmpty() ) {
                 cerr << "Error al abrir el archivo " << argv[1] << endl;
             }
+
+            if (!photo.isValid()) cerr << "Hay un pixel mas grande de lo que deberia" << endl;
 
             ofstream output(argv[2]);
             if ( !output.is_open() ) {

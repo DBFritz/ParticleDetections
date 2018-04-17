@@ -50,6 +50,7 @@ namespace raw{
             rawPhoto_t& operator=(const rawPhoto_t& photo);
 
             bool isEmpty();
+            bool isValid();
 
             unsigned int getWidth();
             unsigned int getHeight();
@@ -130,6 +131,15 @@ bool raw::rawPhoto_t::raspiraw(const char * filename, const int nBadData)
     }
     std::memcpy(data, stream, sizeof(pixelValue_t)*width*height);
     delete[] stream;
+    return true;
+}
+
+bool raw::rawPhoto_t::isValid()
+{
+    /// ¿Test: is there any value larger than saturationValue?
+    for (unsigned int x=0; x<width; x++)
+        for (unsigned int y=0; y<height; y++)
+            if (getValue(x,y) > saturationValue) return false;
     return true;
 }
 
@@ -312,13 +322,13 @@ int raw::raspirawtoArray(pixelValue_t * array, const char * pathFile, const int 
     // after each row, there are nBadData that shouldn't be read
 
     char byteread[5];
-    int v;
+    pixelValue_t v;
     for (int y=0;y<height;y++) {
         for (int x=0;x<width;x+=4) { // read in groups of 4 pixels a full line
             input.read(byteread,5);
             for (int i=0;i<4;i++) {
-                v=byteread[i]<<2;
-                v+=(byteread[4]>> 2*(3-i))&0x3;
+                v= (unsigned char)byteread[i]<<2;
+                v+=((unsigned char)byteread[4] >> 2*(3-i))&0x3;
                 array[y*width+x+i]=v;
             }
         }
