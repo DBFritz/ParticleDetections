@@ -33,9 +33,11 @@ int main(int argc, char *argv[])
                 }
                 photo.print(output);
             }
+            break;
 
         case 2:
             cout << "Usage: " << argv[0] << " /pathto/source /pathto/destination" << endl;
+            break;
 
         case 3:
 

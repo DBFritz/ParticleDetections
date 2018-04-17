@@ -42,6 +42,9 @@ namespace raw{
             rawPhoto_t crop(const unsigned int x_origin,  const unsigned int y_origin, unsigned int width, unsigned int height);
             
             pixelValue_t getValue(unsigned int x, unsigned int y);
+            pixelValue_t interpolate(const unsigned int x, const unsigned int y, bool up, bool right, bool down, bool left,
+                                    bool upright = false, bool downright = false, bool downleft = false, bool upleft = false);
+
 
             // TODO: NO VALIDA
             pixelValue_t& operator() (int x, int y);
@@ -158,7 +161,7 @@ raw::rawPhoto_t raw::rawPhoto_t::crop(const unsigned int x_origin, const unsigne
 }
 
 raw::pixelValue_t raw::rawPhoto_t::getValue(unsigned int x, unsigned int y){
-    if (0<=x && x< width  &&  0<y && y<=height) return  data[y*width+x];
+    if (0<=x && x< width  &&  0<=y && y<height) return  data[y*width+x];
     return 0;
 }
 
@@ -200,9 +203,44 @@ std::ostream& raw::rawPhoto_t::print(std::ostream& output, bool printHeader, cha
     return output;
 }
 
+raw::pixelValue_t raw::rawPhoto_t::interpolate(const unsigned int x, const unsigned int y, bool up, bool right, bool down, bool left,
+                                                bool upright, bool downright, bool downleft, bool upleft)
+{
+    int i=0;
+    pixelValue_t interpolated = 0;
+    if (up          && y>0) {       interpolated += getValue(x,y-1);    i++;    }
+    if (down        && y<height-1){ interpolated += getValue(x,y+1);    i++;    }
+    if (right       && x<width-1){  interpolated += getValue(x+1,y);    i++;    }
+    if (left        && x>0 ){       interpolated += getValue(x-1,y);    i++;    }
+    if (upright    && y>0          && x<width-1) { interpolated += getValue(x,y-1);    i++;    }
+    if (upleft     && y>0          && x>0) {       interpolated += getValue(x,y-1);    i++;    }
+    if (downright  && y<height-1   && x<width-1) { interpolated += getValue(x,y-1);    i++;    }
+    if (downleft   && y<height-1   && x>0) {       interpolated += getValue(x,y-1);    i++;    }
+    return ( i==0 ? interpolated/i : 0);
+}
+
 void raw::rawPhoto_t::toBitMap(const std::string& path)
 {
-    // TODO: COMPLETAR para exportar la imagen en color.
+    // Por el momento asume que es GBRG la disposición
+    bitmap::bitmap_image output(width, height);
+    // Las cuatro esquinas
+    double scale = (double)bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR / saturationValue;
+    for(unsigned int x=0; x<width; x++)
+        for(unsigned int y=0; y<height; y++) {
+            if (x%2==y%2) // A green one
+                output.set_pixel(x,y, interpolate(x,y,true,false,true,false) * scale
+                                    , getValue(x,y) * scale
+                                    , interpolate(x,y,false,true,false,true) * scale);
+            if (x%2==0 && y%2==1) // A blue one
+                output.set_pixel(x,y, interpolate(x,y,false,false,false,false,true,true,true,true) * scale
+                                    , interpolate(x,y,true,true,true,true) * scale
+                                    , getValue(x,y) * scale);
+            if (x%2==1 && y%2==0) // A red one
+                output.set_pixel(x,y, getValue(x,y) * scale
+                                    , interpolate(x,y,true,true,true,true) * scale
+                                    , interpolate(x,y,false,false,false,false,true,true,true,true) * scale);
+        }
+    output.save_image(path);
 }
 
 void raw::rawPhoto_t::toBitMap_grayscale(const std::string& path) { toBitMap_grayscale(path, saturationValue); }
@@ -236,7 +274,7 @@ std::vector<unsigned int> raw::rawPhoto_t::toHistogram()
 
 int raw::rawPhoto_t::recursiveAddingto(event_t * event, int x, int y, pixelValue_t threshold)
 {
-    if (getValue(x,y)<threshold || x < 0 || width <= (unsigned)x || y < 0 || height <= (unsigned)y ) return 0;
+    if (x < 0 || width <= (unsigned)x || y < 0 || height <= (unsigned)y || getValue(x,y)<threshold ) return 0;
     event->addPixel(x,y, getValue(x,y));
     data[y*width+x] = 0; //Apago el pixel para que no lo vuelva a contar
     return 1+recursiveAddingto(event, x+1, y, threshold)+   recursiveAddingto(event, x+1, y+1, threshold)+
@@ -250,7 +288,7 @@ std::vector<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger) {
 }
 std::vector<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixelValue_t threshold)
 {
-    std::list<raw::event_t> events;
+    std::vector<raw::event_t> events;
     for (unsigned int y=0; y<height; y++)
         for(unsigned int x=0; x<width; x++)
             if ( (*this)(x,y)>trigger)
@@ -259,10 +297,10 @@ std::vector<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixe
                 recursiveAddingto(&event,x,y,threshold);
                 events.push_back(event);
             }
-    for (std::list<raw::event_t>::iterator itEvent = events.begin(); itEvent != events.end(); itEvent++)  // para todos los eventos encontrados
-        for (std::list<monocromePixel_t>::iterator itPix = itEvent->pixels.begin(); itPix != itEvent->pixels.end(); itPix++)
+    for (unsigned int i = 0; i < events.size(); i++)  // para todos los eventos encontrados
+        for (std::list<monocromePixel_t>::iterator itPix = events[i].pixels.begin(); itPix != events[i].pixels.end(); itPix++)
             data[itPix->y * width + itPix->x] = itPix->value;
-    return std::vector<raw::event_t>( std::begin(events), std::end(events) );
+    return events;
 }
 
 double raw::rawPhoto_t::mean()
