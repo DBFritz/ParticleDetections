@@ -344,7 +344,7 @@ double raw::rawPhoto_t::sigma_neg() {
 
 int raw::raspirawtoArray(pixelValue_t * array, const char * pathFile, const int width, const int height, const int nBadData)
 {
-    std::ifstream input(pathFile);
+    std::ifstream input(pathFile, std::ios::binary);
     if (!input.good()){
         std::cerr << "Couldn't open " << pathFile << std::endl;
         return -2;
