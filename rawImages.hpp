@@ -291,7 +291,7 @@ std::vector<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixe
     std::vector<raw::event_t> events;
     for (unsigned int y=0; y<height; y++)
         for(unsigned int x=0; x<width; x++)
-            if ( (*this)(x,y)>trigger)
+            if ( getValue(x,y)>trigger)
             {
                 raw::event_t event;
                 recursiveAddingto(&event,x,y,threshold);
@@ -333,7 +333,7 @@ double raw::rawPhoto_t::sigma_neg() {
     double variance = 0;
     long sumHisto = 0;
     int m=0;
-    for(pixelValue_t i=most-1; i > 0; i++) {
+    for(pixelValue_t i=most-1; i > 0; i--) {
         variance += (most-i)*(most-i) * histogram[i];
         if (histogram[i] != 0) m++;
         sumHisto += histogram[i];

@@ -25,44 +25,46 @@ int main (int argc, char * argv[])
     }
     
     rawPhoto_t photo(width, height);
-
-    for(int f=3; ;f++)
+    cerr << "El formato del archivo es:" << endl;
+    cerr << "Centro\t" << "Sigma_centro\t" << "Area\t" << "Carga\t" << "Pixeles Saturados\t" << "Archivo\t" << "LISTA_X_Y_VALUE" << endl;
+    for(int f=1; ;f++)
     {
         char pathFile[64];
         sprintf(pathFile, "%s/out.%04d.raw", argv[1], f);
         cerr << "\rIntentando con el archivo " << pathFile; 
 
         photo.raspiraw(pathFile);
-        if (photo.isEmpty()) break;
+        if (photo.isEmpty() ) break;
+        if (photo.mostFreqValue() > threshold){
+            cerr << "\rLa foto " << pathFile << " está mala" << endl;
+            continue;
+        }
 
-        // Resto el valor de cada columna a cada columna
+        // Resto el valor medio de cada columna a cada columna
         for(int x=0; x < width; x++) {
             double mean = 0;
             for(int y=0; y < height; y++)
-                //if (photo.getValue(x,y) < threshold)
+                if (photo.getValue(x,y) < threshold)
                     mean += photo.getValue(x,y);
             mean /= height;
-            for(int y=0; y < height; y++) {
-                if ( photo.getValue(x,y) > mean )
-                    photo(x,y) -= mean;
-                else
-                    photo(x,y) = 0;
-            }
-        }
-
-        if (photo.mean() > threshold){
-            cerr << "\rLa foto " << pathFile << " está mala                " << endl;
-            continue;
+            for(int y=0; y < height; y++)
+                photo(x,y) -= (photo.getValue(x,y) > mean ? mean : 0);
         }
 
         event_vec_t events = photo.findEvents(trigger, threshold);
 
         for (unsigned int i=0; i < events.size(); i++)
         {
-            long charge = events[i].charge();
-            if ( (unsigned long) charge > histogram.size() ) histogram.resize(charge+1);
-            if ( events[i].size() == 1)
-                ++histogram[charge];
+            cout << events[i].center() << '\t'
+                << events[i].center_sigma() << '\t'
+                << events[i].size() << '\t'
+                << events[i].charge() << '\t'
+                << events[i].saturatedPixels() << '\t'
+                << f << '\t'
+                << "Pixels:\t";
+            for (std::list<monocromePixel_t>::iterator it = events[i].pixels.begin(); it != events[i].pixels.end(); it++)
+                cout << it->x << '\t' << it->y << '\t' << it->value << '\t';
+            cout << endl;
         }
     }
     cerr << endl;

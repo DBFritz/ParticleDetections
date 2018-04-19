@@ -2,6 +2,8 @@
 #include <string>
 #include "rawImages.hpp"
 
+/// Esto todavía no funciona
+
 int main(int argc, char *argv[])
 {
     using namespace std;
