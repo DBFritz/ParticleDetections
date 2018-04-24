@@ -52,10 +52,10 @@ int main (int argc, char * argv[])
                 << events[i].size() << '\t'
                 << events[i].charge() << '\t'
                 << events[i].saturatedPixels() << '\t'
-                << f << '\t'
-                << "Pixels:\t";
-            for (std::list<monocromePixel_t>::iterator it = events[i].pixels.begin(); it != events[i].pixels.end(); it++)
-                cout << it->x << '\t' << it->y << '\t' << it->value << '\t';
+                << f << '\t';
+            //cout << "Pixels:\t";
+            //for (std::list<monocromePixel_t>::iterator it = events[i].pixels.begin(); it != events[i].pixels.end(); it++)
+            //    cout << it->x << '\t' << it->y << '\t' << it->value << '\t';
             cout << endl;
         }
     }

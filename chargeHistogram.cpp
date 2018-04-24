@@ -48,9 +48,11 @@ int main (int argc, char * argv[])
         for (unsigned int i=0; i < events.size(); i++)
         {
             long charge = events[i].charge();
-            if ( (unsigned long) charge > histogram.size() ) histogram.resize(charge+1);
-            if ( events[i].size() == 1)
+            if ( events[i].size() >= sizeMin) {
+                if ( (unsigned long) charge > histogram.size() )
+                    histogram.resize(charge+1);
                 ++histogram[charge];
+            }
         }
     }
     cerr << endl;
