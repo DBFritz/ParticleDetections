@@ -2,16 +2,16 @@
 ////
 ////
 
-
 #include <iostream>
-#include "rawImages.hpp"
 #include <string>
+#include "rawImages.hpp"
+#include "rawFilters.hpp"
 
 using namespace raw;
 using namespace std;
 
 const int width=2592, height=1944;
-pixelValue_t trigger=150, threshold= 50;
+pixelValue_t trigger=150, threshold= 50, sizeMin = 0;
 
 int main (int argc, char * argv[])
 {
@@ -23,6 +23,7 @@ int main (int argc, char * argv[])
         trigger = stoi(argv[2]);
         threshold = stoi(argv[3]);
     }
+    if (argc>4) sizeMin = stoi(argv[4]);
     
     rawPhoto_t photo(width, height);
 
@@ -33,22 +34,9 @@ int main (int argc, char * argv[])
         cerr << "\rIntentando con el archivo " << pathFile; 
 
         photo.raspiraw(pathFile);
-        if (photo.isEmpty()) break;
+        if (photo.isEmpty()) break; 
 
-        // Resto el valor de cada columna a cada columna
-        for(int x=0; x < width; x++) {
-            double mean = 0;
-            for(int y=0; y < height; y++)
-                //if (photo.getValue(x,y) < threshold)
-                    mean += photo.getValue(x,y);
-            mean /= height;
-            for(int y=0; y < height; y++) {
-                if ( photo.getValue(x,y) > mean )
-                    photo(x,y) -= mean;
-                else
-                    photo(x,y) = 0;
-            }
-        }
+        substract_mean_per_column(photo);
 
         if (photo.mean() > threshold){
             cerr << "\rLa foto " << pathFile << " está mala                " << endl;
@@ -67,6 +55,6 @@ int main (int argc, char * argv[])
     }
     cerr << endl;
     for (unsigned int i=0; i < histogram.size(); i++)
-        cout << i << '\t' << histogram[i] << endl;
+        cout << i << '\t' << histogram[i] << '\n';
     return 0;
 }

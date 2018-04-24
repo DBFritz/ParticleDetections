@@ -110,6 +110,7 @@ double raw::event_t::center_sigma()
         variance += std::vec2<double>::dot(diff,diff) * it->value;
         totalWeight+= it->value;
     }
+    if (nPixels == 1) return 0;
     variance /= (nPixels-1)*totalWeight/nPixels;
     return sqrt(variance);
 }

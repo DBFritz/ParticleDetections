@@ -45,8 +45,11 @@ int main(int argc, char *argv[])
             break;
 
         default:
-            /// TODO: Implement a single file
-            cerr << "Todavía no está lista" << endl;
+            photo.raspiraw(argv[1]);
+            if ( photo.isEmpty() ) break;
+            cout << "Mean:\t" << photo.mean() << endl
+                 << "Sigma:\t" << photo.sigma_neg() << endl
+                 << "MostFreqValue:\t" << photo.mostFreqValue() << endl;
             break;
     }
     return 0;

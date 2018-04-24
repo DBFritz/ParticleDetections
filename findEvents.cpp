@@ -2,10 +2,10 @@
 ////
 ////
 
-
 #include <iostream>
-#include "rawImages.hpp"
 #include <string>
+#include "rawImages.hpp"
+#include "rawFilters.hpp"
 
 using namespace raw;
 using namespace std;
@@ -41,15 +41,7 @@ int main (int argc, char * argv[])
         }
 
         // Resto el valor medio de cada columna a cada columna
-        for(int x=0; x < width; x++) {
-            double mean = 0;
-            for(int y=0; y < height; y++)
-                if (photo.getValue(x,y) < threshold)
-                    mean += photo.getValue(x,y);
-            mean /= height;
-            for(int y=0; y < height; y++)
-                photo(x,y) -= (photo.getValue(x,y) > mean ? mean : 0);
-        }
+        substract_mean_per_column(photo);
 
         event_vec_t events = photo.findEvents(trigger, threshold);
 
