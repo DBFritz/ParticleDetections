@@ -37,6 +37,8 @@ namespace raw{
             rawPhoto_t(unsigned int _width, unsigned int _height, pixelValue_t *stream);
             ~rawPhoto_t();
 
+            /// TODO: IMPLEMENTAR UNA FUNCIÓN QUE LEA EL TXT COMO MATRIZ
+            
             bool raspiraw(const char * filename, const int nBadData = 24);
             rawPhoto_t crop(const std::vec2<short int> center, int width, int height);
             rawPhoto_t crop(const unsigned int x_origin,  const unsigned int y_origin, unsigned int width, unsigned int height);
