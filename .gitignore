@@ -9,11 +9,11 @@ results/
 local/
 
 #archivos auxiliares del informe
-informe/*.aux
-informe/*.bbl
-informe/*.blg
-informe/*.fgb_latexmk
-informe/*.fls
-informe/*.log
-informe/*.out
-informe/*.synctex.gzI
+Informe/*.aux
+Informe/*.bbl
+Informe/*.blg
+Informe/*.fdb_latexmk
+Informe/*.fls
+Informe/*.log
+Informe/*.out
+Informe/*.synctex.gz
