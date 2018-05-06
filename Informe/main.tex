@@ -1,0 +1,296 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sample template for MIT Junior Lab Student Written Summaries
+% Available from http://web.mit.edu/8.13/samplepaper/sample-paper.tex
+%
+% Last Updated June 20, 2004
+%
+% Adapted from the American Physical Societies REVTeK-4 Pages
+% at http://publish.aps.org
+%
+% ADVICE TO STUDENTS: Each time you write a paper, start with this
+%    template and save under a new filename.  If convenient, don't
+%    erase unneeded lines, just comment them out.  Often, they
+%    will be useful containers for information.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PREAMBLE
+% The preamble of a LaTeX document is the set of commands that precede
+% the \begin{document} line.  It contains a \documentclass line
+% to load the REVTeK-4 macro definitions and various \usepackage
+% lines to load other macro packages.
+%
+% ADVICE TO STUDENTS: This preamble contains a suggested set of
+%     class options to generate a ``Junior Lab'' look and feel that
+%     facilitate quick review and feedback from one's peers, TA's
+%     and section instructors.  Don't make substantial changes without
+%     first consulting your section instructor.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[aps,twocolumn,secnumarabic,nobalancelastpage,amsmath,amssymb,
+    nofootinbib]{revtex4}
+    
+    % nofootinbib is another document class option that allows you to put
+    % footnotes on the page where they occur rather than at the end of the
+    % paper.  This makes for easier reading!
+    
+    % secnumarabic is a particularly nice way of identifying sections by
+    % number to aid electronic review and commentary.
+    
+    % amsmath and amssymb are necessary for the subequations environment
+    % among others
+    
+    \usepackage{graphics}      % standard graphics specifications
+    \usepackage{graphicx}      % alternative graphics specifications
+    \usepackage{longtable}     % helps with long table options
+    \usepackage{url}           % for on-line citations
+    \usepackage{bm}            % special 'bold-math' package
+    \usepackage[utf8]{inputenc} % para poder poner tildes
+                                                                 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %                                 %%%%%
+    % And now, begin the document...  %%%%%
+    %                                 %%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    \begin{document}
+    \title{Implementación de una librería para la detección y el análisis de interacciones de partículas con CMOS}
+    \author         {Darío Federico Balmaceda}
+    \email          {leschatten@gmail.com}
+    \homepage       {http://fisica.cab.cnea.gov.ar/particulas/html/labdpr/}
+    \affiliation    {Laboratorio Detección de Partículas y Radiación. Centro Atómico Bariloche}
+    \date{\today}
+    
+    \begin{abstract}
+    % ESTO  VALE POR UN ABSTRACT
+    We present a written summary template for use by MIT Junior Lab
+    students, using \LaTeX and the {\bf RevTeX-4} macro package from the
+    American Physical Society.  This is the standard package used in
+    preparing most Physical Review papers, and is used in many other
+    journals as well.  The individual summary you hand in should show
+    evidence of your own mastery of the entire experiment, and possess a
+    neat appearance with concise and correct English.  The abstract is
+    essential.  It should briefly mention the motivation, the method and
+    most important, the quantitative result with errors.  Based on those,
+    a conclusion may be drawn.  The length of the paper should be no more
+    than 2 double-sided pages including all figures.
+    \end{abstract}
+    
+    \maketitle
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Introducción}
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Configuración experimental}
+    
+    \subsection{Sensor CMOS}
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+    
+    \section{Resultados}
+    
+    \subsection{Medición de Rayos Cósmicos}
+
+    \subsection{Medición de los picos $K_{\alpha}$ y $K_{\beta}$}
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Experiment}
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Conclusiones}
+    
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Referencias}
+    
+    \bibliography{sample-paper}
+    
+    \bibliographystyle{prsty}
+    \begin{thebibliography}{99}
+    \bibitem{melissinos1966}Melissinos, A.C., Experiments in Modern
+      Physics - 1st Edition, Academic Press,  [1966]
+    \bibitem{melissinos2003}Melissinos, A.C., Napolitano, J.,  Experiments in Modern
+      Physics - 2nd Edition, Academic Press,  [2003]
+    \bibitem{bevington2003}Bevington and Robinson, Data Reduction and
+      Error Analysis for the Physical Sciences - 3rd Edition, McGraw-Hill,
+      [2003]
+    \bibitem{pritchard1990}Professor D. Pritchard, Personal Communication
+    \end{thebibliography}
+    
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \begin{acknowledgments} FAC gratefully acknowledges Dr. Francine Brown for
+    her early reviews of this manuscript.
+    \end{acknowledgments}
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \clearpage
+    \appendix
+    
+    
+    
+    \section{Using \LaTeX~ Under Windows}
+    For those students who would like to use a Windows platform, MiKTeX
+    (pronounced \emph{mik-tech} is a freely available, implementation of
+    TeX and related programs available from \url{www.miktex.org}. Note
+    that MiKTeX itself runs from a command line prompt and is not terribly
+    convenient.  We strongly recommend you simultaneously purchase and
+    install a very nice TeX editor/shell called WinEdt, available from
+    \url{www.winedt.com} for only \$30 for students. This interface is
+    substantially easier than using `emacs' on Athena for writing and
+    typesetting scientific papers and we encourage you to check it out.
+    
+    Once you've installed the above software, you will need to obtain the
+    group of files listed in the next section and put them on your Windows
+    machine in order to `rebuild' this document from scratch.  MIT offers
+    free of charge to students (\url{http://web.mit.edu/software/win.html}
+    a variety of useful software for communicating between your Windows
+    machine and your Athena account.  Three packages you should obtain and
+    install are:
+    \begin{verbatim}
+    SecureFX
+    SecureCRT
+    X-Win32
+    \end{verbatim}
+    
+    If you wish to view postscript files under Windows, we
+    suggest downloading and installing Ghostscript available from
+    \url{www.cs.wisc.edu/~ghost}.
+    
+    
+    
+    
+    
+    \section{Using \LaTeX~ Under Athena}
+    For students wishing to utilize MIT's Athena environment, it is also
+    a simple process to create your documents.  You can use the following
+    commands verbatim or tweak them to suit your own organizational system.
+    
+    In your home directory on Athena, create a convenient directory structure for all of your Junior Lab
+    work. Type:
+    \begin{verbatim}
+    > mkdir ~/8.13
+    > mkdir ~/8.13/papers
+    > mkdir ~/8.13/papers/template
+    > cd ~/8.13/papers/template
+    \end{verbatim}
+    Once this (or similiar) directory structure has been created, copy all
+    of the files needed to compile the template from the Junior Lab locker
+    into your own Athena account: Type: 
+    \begin{verbatim}
+    > setup 8.13
+    > cp /mit/8.13/www/Samplepaper/* .  
+    \end{verbatim}
+    The final period above places the
+    copied files into the current directory so make sure you're in the
+    correct directory!  You can see where you are by typing:
+    \begin{verbatim}
+    > pwd
+    \end{verbatim}
+    The following files should now be in
+    your current directory: 
+    \begin{verbatim}
+    sample-paper.tex
+    sample-paper.bib
+    sample-fig1.pdf 
+    sample-fig3.pdf 
+    typical-fit-plot.pdf
+    \end{verbatim}
+    Additional files may also have been copied but don't worry, these get
+    regenerated when you build your PDF document.
+    
+    The `setup' command automatically
+    appends to your path the location of the {\bf RevTeX-4} files.
+    
+    Now let's build the file (omitting the `.tex' suffix in the following steps).  
+    
+    %First type: {\tt > add ghostscript}.  The
+    %final step in the `build' file uses the ps2pdfwr utility to convert a
+    %POSTSCRIPT version of your paper into a more easily viewed PDF format.
+    %This utility is in the `ghostscript' locker on Athena.  
+    
+    
+    \begin{verbatim}
+    > pdflatex sample-paper
+    > bibtex sample-paper
+    > pdflatex sample-paper
+    > pdflatex sample-paper
+    \end{verbatim}
+    
+    
+    The repeated calls to `pdflatex' are necessary to resolve any nested
+    references in the final PDf file.  The `bibtex' call reads in the
+    bibliography file `sample-paper.bib' allowing citation references to
+    be resolved.
+    
+    {\bf Remember to {\tt ispell -t filename.tex} to perform a \LaTeX
+    safe spell check before handing in your paper!}
+    
+    \subsection{Useful
+    Athena Utilities} {\bf Drawing Programs}
+    
+    Students should become proficient with a simple (vector based)
+    computer drawing program such as {\bf XFIG} or {\bf TGIF} on Athena.
+    Every written summary should include one or two simple schematics,
+    based on their initial hand sketches from their lab notebooks.
+    
+    {\bf Image Conversion}
+    
+    It is easy to  convert images from one format to another (e.g. a
+    scanned jpeg or bitmap image into an pdf file for inclusion into a
+    written summary).  A useful utility, available on the Sun's is
+    ``imconvert''. Typing ``imconvert'' without any arguments will show
+    you the accepted file types.  For example, to convert a `jpg' image
+    to `pdf', one types: ``imconvert jpg:filename.jpg
+    pdf:filename.pdf''.  Another command is `ps2pdf'.  
+    
+    
+    
+    % Surround figure environment with turnpage environment for landscape
+    % figure
+    % \begin{turnpage}
+    % \begin{figure}
+    % \includegraphics{}%
+    % \caption{\label{}}
+    % \end{figure}
+    % \end{turnpage}
+    
+    % tables should appear as floats within the text
+    %
+    % Here is an example of the general form of a table:
+    % Fill in the caption in the braces of the \caption{} command. Put the label
+    % that you will use with \ref{} command in the braces of the \label{} command.
+    % Insert the column specifiers (l, r, c, d, etc.) in the empty braces of the
+    % \begin{tabular}{} command.
+    % The ruledtabular enviroment adds doubled rules to table and sets a
+    % reasonable default table settings.
+    % Use the table* environment to get a full-width table in two-column
+    % Add \usepackage{longtable} and the longtable (or longtable*}
+    % environment for nicely formatted long tables. Or use the the [H]
+    % placement option to break a long table (with less control than
+    % in longtable).
+    % \begin{table}%[H] add [H] placement to break table across pages
+    % \caption{\label{}}
+    % \begin{ruledtabular}
+    % \begin{tabular}{}
+    % Lines of table here ending with \\
+    % \end{tabular}
+    % \end{ruledtabular}
+    % \end{table}
+    
+    % Surround table environment with turnpage environment for landscape
+    % table
+    % \begin{turnpage}
+    % \begin{table}
+    % \caption{\label{}}
+    % \begin{ruledtabular}
+    % \begin{tabular}{}
+    % \end{tabular}
+    % \end{ruledtabular}
+    % \end{table}
+    % \end{turnpage}
+    
+    
+    \end{document}
+    
