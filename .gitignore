@@ -16,4 +16,4 @@ informe/*.fgb_latexmk
 informe/*.fls
 informe/*.log
 informe/*.out
-informe/*.synctex.gz
+informe/*.synctex.gzI
