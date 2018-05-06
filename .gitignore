@@ -8,3 +8,12 @@ results/
 #Local programs
 local/
 
+#archivos auxiliares del informe
+informe/*.aux
+informe/*.bbl
+informe/*.blg
+informe/*.fgb_latexmk
+informe/*.fls
+informe/*.log
+informe/*.out
+informe/*.synctex.gz
