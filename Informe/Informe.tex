@@ -9,6 +9,7 @@
   \usepackage{microtype}      % Slightly tweak font spacing for aesthetics
   
   \usepackage[spanish]{babel} % Language hyphenation and typographical rules
+  \usepackage[utf8]{inputenc} % para poder utilizar acentos sin que te jodan
   
   \usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry}     % Document margins
   \usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption}    % Custom captions under/above floats in tables or figures
@@ -44,11 +45,12 @@
   \usepackage{graphics}     % standard graphics specifications
   \usepackage{graphicx}     % alternative graphics specifications
   \usepackage{longtable}    % helps with long table options
-  \usepackage{siunitx}      % para las unidades
+  \usepackage{svg}          % para gráficos .svg
+  \usepackage[binary-units=true]{siunitx}      % para las unidades
   
 
 %%%%%%%%%---Title, authors, date & abstract---%%%%%%%%%
-\title{Implementación de una librería para la detección y el análisis de interacciones de partículas con CMOS}
+\title{Análisis de interacciones de partículas mediante implementación de una librería para su detección con sensores CMOS}
   \author{%
     \textsc{Darío Federico Balmaceda} \\[1ex]     %  Your name
     \normalsize Laboratorio Detección de Partículas y Radiación. Centro Atómico Bariloche \\                                    %  Your institution
@@ -118,14 +120,13 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \section{Configuración experimental}
 
-    \subsection{Raspberry}
-
     \subsection{Sensor CMOS}
       Se ha utilizado el sensor OmniVision OV5647 de la cámara Raspicam V1.3 cuyo precio ronda los 25 dólares.
       El sensor posee una resolución de	$2592$x$1944$ pixeles, lo que le una resolución total de $5$ MP.
       El tamaño de un píxel de \SI{1.4}{\micro\meter} x \SI{1.4}{\micro\meter}.
       El FULL-WELL-CAPACITY es de $4300$ electrones. %No sé como se traduce esto.
       El sensor posee un ADC de 10 bits por pixel.
+      Esto nos daba un tamaño total por imagen raw de unos \SI{6.4}{\mega\byte}
 
       El sensor CMOS posee un filtro de Bayer, el mismo consiste en un arreglo de filtros rojos, verdes y azules
       dispuestos como se muestra en la Fig.~\ref{fig:bayer}. De esta forma, cada pixel posee la información de una longitud de onda,
@@ -138,12 +139,18 @@
         \label{fig:bayer}
       \end{figure}
 
+    %TODO: además poner todos los resultados anteriores que me pertimiteron entender cómo funciona todo
+
+    \subsection{Raspberry}
+    Se utilizó una Raspberry Pi modelo 3b, con una memoria micro SD de \SI{16}{\giga\byte}.
+
+    %TODO: Para un informe por ahí es conveniente poner los detalles de la raspistill y la librería en python
     \subsection{Librería raspiraw}
       Para la adquisicón de datos se utilizó la librería {\it raspiraw}\cite{raspiraw} debido a la rapidez con la que se toman los datos.
       En el apéndice~\ref{sec:ap_alternatives} se muestran otras alternativas que son más lentas para la toma de datos,
       pero que pueden resultar más simples y sencillas de implementar.
 
-      %TODO:   Hablar sobre los parámetros que se le pueden variar
+    %TODO:   Hablar sobre los parámetros que se le pueden variar
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
   \section{Resultados}
@@ -152,7 +159,13 @@
     
     \subsection{Medición de Rayos Cósmicos}
 
-    \subsection{Medición de picos $K_{\alpha}$ y $K_{\beta}$}
+    \subsection{Mediciones de picos $K_{\alpha}$ y $K_{\beta}$}
+
+    \begin{figure}[h]
+      \includegraphics[width=0.47\textwidth]{figures/x-ray_spectrum.pdf}
+      \caption{Espectro patronum!}
+      \label{fig:spectrum_x-ray}
+    \end{figure}
 
       \subsubsection{Cobre}
 
@@ -164,11 +177,11 @@
     
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \section{Conclusiones}
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \section{Referencias}\label{}
-    
-    \bibliographystyle{siam}
-    \bibliography{bibliography}
+
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+  \bibliographystyle{siam}
+  \bibliography{bibliography}
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \section*{Agradecimientos}
@@ -176,14 +189,15 @@
     acompañar el trabajo en forma constante.
 
     A Miguel Sofo por la disponibilidad y por su flexibilidad a la hora de trabajar.
-    % TODO: decidir, más gente? 
-    % A Geraldina Gulop, Florencia  ¿?
+    % TODO: decidir, más gente?
+    % TODO: Agregar a alguien que Bertou me dijo pero me colgué
    
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \clearpage
   \appendix
   \section{Alternativas a Raspiraw}\label{sec:ap_alternatives}
-  
+  % Por ahí conviene ponerlo dentro del informe
+
   \section{Documentación de la librería}\label{sec:ap_doc}
 
     \subsection{rawImages}\label{sec:ap_doc:rawImages}

@@ -147,7 +147,7 @@ bool raw::rawPhoto_t::raspiraw(const char * filename, const int nBadData)
 
 bool raw::rawPhoto_t::isValid()
 {
-    /// ¿Test: is there any value larger than saturationValue?
+    /// Test: is there any value larger than saturationValue?
     for (unsigned int x=0; x<width; x++)
         for (unsigned int y=0; y<height; y++)
             if (getValue(x,y) > saturationValue) return false;
