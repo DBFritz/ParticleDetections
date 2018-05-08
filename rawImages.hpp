@@ -31,13 +31,16 @@ namespace raw{
         public:
             static const int maxValue{1024-1};
             /// Constructors:
+            // TODO: Implementar este constructor bonito
+            rawPhoto_t(const char * filename);
             // Photo with all pixels set in 0
             rawPhoto_t(unsigned int _width, unsigned int _height);
             // Photo with the pixels from the stream array
             rawPhoto_t(unsigned int _width, unsigned int _height, pixelValue_t *stream);
             ~rawPhoto_t();
 
-            /// TODO: IMPLEMENTAR UNA FUNCIÓN QUE LEA EL TXT COMO MATRIZ
+            // TODO: lee una matrix
+            bool fromtxt(const char * filename);
             
             bool raspiraw(const char * filename, const int nBadData = 24);
             rawPhoto_t crop(const std::vec2<short int> center, int width, int height);
@@ -63,8 +66,6 @@ namespace raw{
             void setSaturationValue(pixelValue_t saturation) { saturationValue = saturation; }
             pixelValue_t getSaturationValue() { return saturationValue; }
 
-            /// TODO: Poner bien esto, es un pedo.
-            /// Instead of printing, I could overlad de << operator. Much better!
             std::ostream& print(std::ostream& output = std::cout, bool printHeader = false, char spacer = '\t');
 
             friend std::ostream& operator<<(std::ostream &os, raw::rawPhoto_t photo);
@@ -77,7 +78,7 @@ namespace raw{
             std::vector<event_t> findEvents(pixelValue_t trigger = maxValue/2);
             std::vector<event_t> findEvents(pixelValue_t trigger, pixelValue_t threshold);
 
-            // TODO: Implement
+            // TODO: verificar que anda
             pixelValue_t median();
             double mean();
             pixelValue_t mostFreqValue();
@@ -124,6 +125,11 @@ raw::rawPhoto_t::rawPhoto_t(unsigned int _width, unsigned int _height, pixelValu
 
 raw::rawPhoto_t::~rawPhoto_t(){
     delete[] data;
+}
+
+bool readFile(const char * filename)
+{
+    raw::pixelValue_t *stream = new raw::pixelValue_t[height*width];
 }
 
 bool raw::rawPhoto_t::raspiraw(const char * filename, const int nBadData)
@@ -305,6 +311,25 @@ std::vector<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixe
     return events;
 }
 
+raw::pixelValue_t raw::rawPhoto_t::median()
+{
+    std::vector<unsigned int> histogram = toHistogram();
+    pixelValue_t head = 0, tail = saturationValue;
+    while (head<=tail)
+    {
+        while (histogram[head]==0 && head<=tail) head++;
+        while (histogram[tail]==0 && head<=tail) tail--;
+        if (histogram[head] < histogram[tail]) {
+            histogram[tail] -= histogram[head];
+            histogram[head] = 0;
+        } else {
+            histogram[head] -= histogram[tail];
+            histogram[tail] = 0;
+        } 
+    }
+    return tail;
+}
+
 double raw::rawPhoto_t::mean()
 {
     double sum = 0;
@@ -324,7 +349,11 @@ raw::pixelValue_t raw::rawPhoto_t::mostFreqValue()
     return most;
 }
 
-// Compute the sigma using the values that are less than the mostFrequentValue;
+/**
+ * @brief Compute the sigma using the values that are less than the mostFrequentValue
+ * TODO: poner que es útil para cuando uno tiene eventos pero que no quiere tomar el sigma de los eventos.
+ * @return double the standard deviation
+ */
 double raw::rawPhoto_t::sigma_neg() {
     std::vector<unsigned int> histogram = toHistogram();
     pixelValue_t most=0;
@@ -343,7 +372,16 @@ double raw::rawPhoto_t::sigma_neg() {
     return sqrt(m * variance / ( sumHisto * (m-1) ));
 }
 
-
+/**
+ * @brief Convert a binary raw photo into an array
+ *      TODO: poner cómo estar ordenado los bits
+ * @param array The destination array to fill with the raw data
+ * @param pathFile The path of the source file (tipically a .raw file)
+ * @param width the width of the raw image
+ * @param height the height of the raw image
+ * @param nBadData ommit nBadData bits after reading a whole row (tipically 24 for and TODO: completar)
+ * @return int 
+ */
 int raw::raspirawtoArray(pixelValue_t * array, const char * pathFile, const int width, const int height, const int nBadData)
 {
     std::ifstream input(pathFile, std::ios::binary);

@@ -1,26 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Journal Article
-% LaTeX Template
-% Version 1.4 (15/5/16)
-%
-% This template has been downloaded from:
-% http://www.LaTeXTemplates.com
-%
-% Original author:
-% Frits Wenneker (http://www.howtotex.com) with extensive modifications by
-% Vel (vel@LaTeXTemplates.com)
-%
-% Edited:  Darío Federico Balmaceda
-%
-% License:
-% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%----------------------------------------------------------------------------------------
-%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
-
+%%%%%%%%%---Packages and document settings---%%%%%%%%%
 \documentclass[twoside,twocolumn]{article}
 
   \usepackage{blindtext}      % Package to generate dummy text throughout this template 
@@ -68,149 +46,143 @@
   \usepackage{longtable}    % helps with long table options
   \usepackage{siunitx}      % para las unidades
   
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %%%%                                    %%%%%
-  %%%%  Title, authors, date & abstract   %%%%%
-  %%%%                                    %%%%%
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  
-  \setlength{\droptitle}{-4\baselineskip}                 % Move the title up
-  \pretitle{\begin{center}\Large\bfseries}                 % Article title formatting
-  \posttitle{\end{center}}                                % Article title closing formatting
 
-  \title{Implementación de una librería para la detección y el análisis de interacciones de partículas con CMOS}
+%%%%%%%%%---Title, authors, date & abstract---%%%%%%%%%
+\title{Implementación de una librería para la detección y el análisis de interacciones de partículas con CMOS}
   \author{%
     \textsc{Darío Federico Balmaceda} \\[1ex]     %  Your name
     \normalsize Laboratorio Detección de Partículas y Radiación. Centro Atómico Bariloche \\                                    %  Your institution
     \normalsize \href{mailto:leschatten@gmail.com}{\texttt{leschatten@gmail.com}}                   %  Your email address
     %\and                                                                      %  Uncomment if 2 authors are require
-    %\textsc{Jane Smith}\thanks{Corresponding author} \\[1ex]                  % duplicate these 4 lines
+    %\textsc{Jane Smith} \\[1ex]                  % duplicate these 4 lines
     %\normalsize University of Utah \\ % Second author's institution           % if more
     %\normalsize \href{mailto:jane@smith.com}{jane@smith.com}
   }
   \date{\today}                                                                % Leave empty to omit a date
   \renewcommand{\maketitlehookd}{
     \begin{abstract}
-      \noindent \blindtext
+      \noindent \blindtext %TODO: ABSTRACT
     \end{abstract}
   }
 
+  \setlength{\droptitle}{-4\baselineskip}                 % Move the title up
+  \pretitle{\begin{center}\Large\bfseries}                 % Article title formatting
+  \posttitle{\end{center}}                                % Article title closing formatting
+
+%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %%%%                                 %%%%%
   %%%%  And now, begin the document... %%%%%
   %%%%                                 %%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  
-  \begin{document}
+\begin{document}
   
   \maketitle              % Print the title
   
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \section{Introducción}
-  %\cite{Lane}
-  \lettrine[nindent=0em,lines=3]{L} orem ipsum dolor sit amet, consectetur adipiscing elit.
-  \subsection{Sensores CMOS-APS}
-  Un sensor de píxeles activos (APS por sus siglas en inglés) es un sensor que detecta la radiación basado en tecnología CMOS.
-  Este tipo de sensores son ampliamente utilizados de manera comercial debido a su
-  bajo costo de producción y sus buenos resultados en fotografía.
-  Estos sensores están presentes en teléfonos celulares, ordenadores portatiles, cámaras de acción,
-  y en la mayoría de los dispositivos electrónicos que posee una cámara.
+    %\cite{Lane}
+    \lettrine[nindent=0em,lines=3]{L} orem ipsum dolor sit amet, consectetur adipiscing elit.
+  
+    \subsection{Sensores CMOS-APS}
+      Un sensor de píxeles activos (APS por sus siglas en inglés) es un sensor que detecta la radiación basado en tecnología CMOS.
+      Este tipo de sensores son ampliamente utilizados de manera comercial debido a su
+      bajo costo de producción y sus buenos resultados en fotografía.
+      Estos sensores están presentes en teléfonos celulares, ordenadores portatiles, cámaras de acción,
+      y en la mayoría de los dispositivos electrónicos que posee una cámara.
 
-  Los sensores consisten en un arreglo matricial de fotodiodos, 
-  que producen una corriente eléctrica que varía en función de la intensidad de luz recibida.
-  Por cada fotodiodo, se incorpora un amplificador y un conversor analógico digital (ADC) para la lectura de los datos.
+      Los sensores consisten en un arreglo matricial de fotodiodos, 
+      que producen una corriente eléctrica que varía en función de la intensidad de luz recibida.
+      Por cada fotodiodo, se incorpora un amplificador y un conversor analógico digital (ADC) para la lectura de los datos.
   
 
-  \subsection{Interacción de la radiación de partículas con la materia}
+    \subsection{Interacción de la radiación de partículas con la materia}
 
-  \subsection{Rayos cósmicos}
+    \subsection{Rayos cósmicos}
     
-  \subsection{Picos $K_{\alpha}$ y $K_{\beta}$}
+    \subsection{Picos $K_{\alpha}$ y $K_{\beta}$}
 
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \section{Configuración experimental}
 
-  \subsection{Raspberry}
+    \subsection{Raspberry}
 
-  \subsection{Sensor CMOS}
-  Se ha utilizado el sensor OmniVision OV5647 de la cámara Raspicam V1.3 cuyo valor ronda los 25 dólares.
-  El sensor posee una resolución de	$2592$x$1944$ pixeles, lo que le una resolución total de $5$ MP.
-  El tamaño de un píxel de \SI{1.4}{\micro\meter} x \SI{1.4}{\micro\meter}.
-  El FULL-WELL-CAPACITY es de $4300$.
-  El sensor posee un ADC de 10 bits por pixel.
+    \subsection{Sensor CMOS}
+      Se ha utilizado el sensor OmniVision OV5647 de la cámara Raspicam V1.3 cuyo precio ronda los 25 dólares.
+      El sensor posee una resolución de	$2592$x$1944$ pixeles, lo que le una resolución total de $5$ MP.
+      El tamaño de un píxel de \SI{1.4}{\micro\meter} x \SI{1.4}{\micro\meter}.
+      El FULL-WELL-CAPACITY es de $4300$ electrones. %No sé como se traduce esto.
+      El sensor posee un ADC de 10 bits por pixel.
 
-  El sensor CMOS posee un filtro de Bayer, el mismo consiste en un arreglo de filtros rojos, verdes y azules
-  dispuestos como se muestra en la Fig.~\ref{fig:bayer}. De esta forma, cada pixel posee la información de una longitud de onda,
-  esto permite una composición de la imagen en 3 colores diferentes, de manera análoga al ojo humano.
+      El sensor CMOS posee un filtro de Bayer, el mismo consiste en un arreglo de filtros rojos, verdes y azules
+      dispuestos como se muestra en la Fig.~\ref{fig:bayer}. De esta forma, cada pixel posee la información de una longitud de onda,
+      esto permite una composición de la imagen en 3 colores diferentes, de manera análoga al ojo humano.
 
-  \begin{figure}[h]
-    \includegraphics[width=0.35\textwidth]{figures/Bayer_pattern.png}
-    \caption{Filtro de Bayer típico de un sensor CMOS-APS. Por cada 4 pixeles 2 son verdes, 1 es rojo y 1 es azul.
-      El color verde es utilizado dos veces debido a la sensibilidad al verde del ojo humano.}
-    \label{fig:bayer}
-  \end{figure}
+      \begin{figure}[h]
+        \includegraphics[width=0.35\textwidth]{figures/Bayer_pattern.png}
+        \caption{Filtro de Bayer típico de un sensor CMOS-APS. Por cada 4 pixeles 2 son verdes, 1 es rojo y 1 es azul.
+          El color verde es utilizado dos veces debido a la sensibilidad al verde del ojo humano.}
+        \label{fig:bayer}
+      \end{figure}
 
-  \subsection{librería raspiraw}
-  Para la adquisicón de datos se utilizó la librería {\it raspiraw}\cite{raspiraw} debido a la rapidez con la que se toman los datos.
-  En el apéndice~\ref{sec:ap_alternatives} se muestran otras alternativas que son más lentas para la toma de datos,
-  pero que pueden resultar más simples y sencillas de implementar.
+    \subsection{Librería raspiraw}
+      Para la adquisicón de datos se utilizó la librería {\it raspiraw}\cite{raspiraw} debido a la rapidez con la que se toman los datos.
+      En el apéndice~\ref{sec:ap_alternatives} se muestran otras alternativas que son más lentas para la toma de datos,
+      pero que pueden resultar más simples y sencillas de implementar.
 
-  %   Hablar sobre los parámetros que se le pueden variar
+      %TODO:   Hablar sobre los parámetros que se le pueden variar
 
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
   \section{Resultados}
-  Para probar el correcto funcionamiento de la librería, se utilizó el poder de procesamiento en dos aplicaciones diferentes.
-  Una de ellas consistió en detectar Rayos Cósmicos, y la otra la de observar los picos $K_{\alpha}$ y $K_{\beta}$ de diferentes elementos.
+    Para probar el correcto funcionamiento de la librería, se utilizó el poder de procesamiento en dos aplicaciones diferentes.
+    Una de ellas consistió en detectar Rayos Cósmicos, y la otra la de observar los picos $K_{\alpha}$ y $K_{\beta}$ de diferentes elementos.
     
-  \subsection{Medición de Rayos Cósmicos}
+    \subsection{Medición de Rayos Cósmicos}
 
-  \subsection{Medición de picos $K_{\alpha}$ y $K_{\beta}$}
+    \subsection{Medición de picos $K_{\alpha}$ y $K_{\beta}$}
 
-  \subsubsection{Cobre}
+      \subsubsection{Cobre}
 
-  \subsubsection{Aluminio}
+      \subsubsection{Aluminio}
 
-  \subsubsection{Hierro}
+      \subsubsection{Hierro}
 
-  \subsubsection{Calcio}
-    
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \section{Conclusiones}
-    
-  
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \section{Referencias}\label{}
-    
-  \bibliographystyle{siam}
-  \bibliography{bibliography}
-
-  \section*{Agradecimientos}
-  Se agradece la colaboración de Xavier Bertou por la experiencia brindada y por
-  acompañar el trabajo en forma constante.
-
-  A Miguel Sofo por la disponibilidad y por su flexibilidad a la hora de trabajar
-
-  % A Geraldina Gulop  ¿?
-   
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \clearpage
-  \appendix
+      \subsubsection{Calcio}
     
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \section{Conclusiones}
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \section{Referencias}\label{}
+    
+    \bibliographystyle{siam}
+    \bibliography{bibliography}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \section*{Agradecimientos}
+    Se agradece la colaboración de Xavier Bertou por la experiencia brindada y por
+    acompañar el trabajo en forma constante.
+
+    A Miguel Sofo por la disponibilidad y por su flexibilidad a la hora de trabajar.
+    % TODO: decidir, más gente? 
+    % A Geraldina Gulop, Florencia  ¿?
+   
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \clearpage
+  \appendix
   \section{Alternativas a Raspiraw}\label{sec:ap_alternatives}
   
   \section{Documentación de la librería}\label{sec:ap_doc}
 
-  \subsection{rawImages}\label{sec:ap_doc:rawImages}
+    \subsection{rawImages}\label{sec:ap_doc:rawImages}
 
-  \subsection{rawEvent}\label{sec:ap_doc:rawEvent}
+    \subsection{rawEvent}\label{sec:ap_doc:rawEvent}
 
-  \subsection{rawFilters}\label{sec:ap_doc:rawFilters}
+    \subsection{rawFilters}\label{sec:ap_doc:rawFilters}
 
-  \end{document}
+      En este header se incluyen filtros típicos utilizados para el procesamiento de imágenes \emph{rawPhoto\_t}.
+      Estas son externas a la clase \emph{rawPhoto\_t}, por lo que deben ser pasadas como parámetros. 
+
+\end{document}
 
     
 
