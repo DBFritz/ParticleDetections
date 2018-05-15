@@ -50,7 +50,8 @@
         "vector": "cpp",
         "ctime": "cpp",
         "ratio": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "sstream": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

@@ -57,6 +57,9 @@ namespace raw{
 
             rawPhoto_t& operator=(const rawPhoto_t& photo);
 
+            rawPhoto_t& operator+=(rawPhoto_t& toAdd);
+            rawPhoto_t& operator/=(const double toDivide);
+
             bool isEmpty();
             bool isValid();
 
@@ -73,10 +76,14 @@ namespace raw{
             void toBitMap(const std::string& path);
             void toBitMap_grayscale(const std::string& path);
             void toBitMap_grayscale(const std::string& path, pixelValue_t maxValue);
+            void toBitMap_grayscale(const std::string& path, pixelValue_t minValue, pixelValue_t maxValue);
 
             std::vector<unsigned int> toHistogram();
             std::vector<event_t> findEvents(pixelValue_t trigger = maxValue/2);
             std::vector<event_t> findEvents(pixelValue_t trigger, pixelValue_t threshold);
+
+            pixelValue_t maximum();
+            pixelValue_t minimum();
 
             // TODO: verificar que anda
             pixelValue_t median();
@@ -90,8 +97,6 @@ namespace raw{
             rawPhoto_t transpose();
             rawPhoto_t operator= (rawPhoto_t toCopy);
             bool operator== (rawPhoto_t toCompare);
-            void operator+= (pixelValue_t toAdd);
-            void operator-= (pixelValue_t toAdd);
 
             //TODO: overload this function
             rawPhoto_t operator+(rawPhoto_t toAdd);
@@ -127,9 +132,32 @@ raw::rawPhoto_t::~rawPhoto_t(){
     delete[] data;
 }
 
-bool readFile(const char * filename)
+// TODO: implementar
+
+raw::rawPhoto_t::rawPhoto_t(const char * filename)
 {
-    raw::pixelValue_t *stream = new raw::pixelValue_t[height*width];
+    width = height = 0;
+    std::ifstream input(filename);
+    std::string line;
+    if (!input.good()){
+        std::cerr << "Couldn't open " << filename << std::endl;
+        return;
+    }
+    std::getline(input, line);
+    for(unsigned int i=0; i < line.length(); i++){
+        if (line[i] == '\t') width++;
+    }
+    while (!input.eof()) {
+        std::getline(input,line);
+        height++;
+    }
+    input.clear();
+    input.seekg(0);
+
+    data = new pixelValue_t[width*height];
+    for(unsigned int y=0; y<height; y++)
+        for(unsigned int x=0; x<width; x++)
+            input >> data[y*width+x];
 }
 
 bool raw::rawPhoto_t::raspiraw(const char * filename, const int nBadData)
@@ -187,6 +215,22 @@ raw::rawPhoto_t& raw::rawPhoto_t::operator=(const raw::rawPhoto_t& photo)
     std::memcpy(data, this->data, sizeof(raw::pixelValue_t)*width*height);
     return *this;
 }
+
+raw::rawPhoto_t& raw::rawPhoto_t::operator+=(raw::rawPhoto_t& toAdd)
+{
+    for(unsigned int x=0; x<width && x<toAdd.getWidth(); x++)
+        for(unsigned int y=0; y<height && y<toAdd.getHeight(); y++)
+            data[y*width+x] += toAdd.getValue(x,y);
+    return *this;
+}
+raw::rawPhoto_t& raw::rawPhoto_t::operator/=(const double toDivide)
+{
+    for(unsigned int x=0; x<width; x++)
+        for(unsigned int y=0; y<height; y++)
+            data[y*width+x] /= toDivide;
+    return *this;
+}
+
 
 bool raw::rawPhoto_t::isEmpty()
 {
@@ -251,16 +295,18 @@ void raw::rawPhoto_t::toBitMap(const std::string& path)
     output.save_image(path);
 }
 
-void raw::rawPhoto_t::toBitMap_grayscale(const std::string& path) { toBitMap_grayscale(path, saturationValue); }
-void raw::rawPhoto_t::toBitMap_grayscale(const std::string& path, raw::pixelValue_t maxValue)
+void raw::rawPhoto_t::toBitMap_grayscale(const std::string& path) { toBitMap_grayscale(path, 0, saturationValue); }
+void raw::rawPhoto_t::toBitMap_grayscale(const std::string& path, raw::pixelValue_t maxValue) { toBitMap_grayscale(path, 0, maxValue); }
+void raw::rawPhoto_t::toBitMap_grayscale(const std::string& path, raw::pixelValue_t minValue, raw::pixelValue_t maxValue)
 {
     bitmap::bitmap_image output(width, height);
+    unsigned short pixSat = bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR;
+    unsigned short pixelValue;
     for (unsigned int y=0; y<height; y++)
-        for (unsigned int x=0; x<width; x++)
-            output.set_pixel(x,y, 
-                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/maxValue,
-                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/maxValue,
-                data[y*width+x]*bitmap::MAX_VALUE_PER_PIXEL_PER_COLOR/maxValue);
+        for (unsigned int x=0; x<width; x++) {
+            pixelValue= (data[y*width+x]-minValue)*pixSat/(maxValue-minValue);
+            output.set_pixel(x,y, pixelValue, pixelValue, pixelValue);
+        }
     output.save_image(path);
 }
 
@@ -309,6 +355,26 @@ std::vector<raw::event_t> raw::rawPhoto_t::findEvents(pixelValue_t trigger, pixe
         for (std::list<monocromePixel_t>::iterator itPix = events[i].pixels.begin(); itPix != events[i].pixels.end(); itPix++)
             data[itPix->y * width + itPix->x] = itPix->value;
     return events;
+}
+
+raw::pixelValue_t raw::rawPhoto_t::maximum()
+{
+    pixelValue_t maximum = 0;
+    for (unsigned int y=0; y<height; y++)
+        for(unsigned int x=0; x<width; x++)
+            if (data[y*width+x]>maximum)
+                maximum = data[y*width+x];
+    return maximum;
+}
+
+raw::pixelValue_t raw::rawPhoto_t::minimum()
+{
+    pixelValue_t minimum = saturationValue;
+    for (unsigned int y=0; y<height; y++)
+        for(unsigned int x=0; x<width; x++)
+            if (data[y*width+x]<minimum)
+                minimum = data[y*width+x];
+    return minimum;
 }
 
 raw::pixelValue_t raw::rawPhoto_t::median()
