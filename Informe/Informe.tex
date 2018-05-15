@@ -93,7 +93,7 @@
   \maketitle              % Print the title
   
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \section{Introducción}
+  \section{Introducción}\label{sec:intro}
     %\cite{Lane}
     \lettrine[nindent=0em,lines=3]{L} orem ipsum dolor sit amet, consectetur adipiscing elit.
       Etiam lobortis facilisis sem. Nullam nec mi et nequepharetra sollicitudin.
@@ -101,7 +101,7 @@
       lectusvelit ultrices augue, a dignissim nibh lectus placerat pede.
     %TODO: reemplazar esto
 
-    \subsection{Sensores CMOS-APS}
+    \subsection{Sensores CMOS-APS}\label{sec:intro:CMOS_sensor}
       Un sensor de píxeles activos (APS por sus siglas en inglés) es un sensor que detecta la radiación basado en tecnología CMOS.
       Este tipo de sensores son ampliamente utilizados de manera comercial debido a su
       bajo costo de producción y sus buenos resultados en fotografía.
@@ -112,7 +112,7 @@
       que producen una corriente eléctrica que varía en función de la intensidad de luz recibida.
       Por cada fotodiodo, se incorpora un amplificador y un conversor analógico digital (ADC) para la lectura de los datos.
 
-    \subsubsection{Filtro de Bayer}
+    \subsubsection{Filtro de Bayer}\label{sec:intro:bayer}
 
       Típicamente los sensores CMOS destinados para fotografías poseen un filtro de Bayer, 
       el mismo consiste en un arreglo de filtros rojos, verdes y azules dispuestos como se muestra en la Fig.~\ref{fig:bayer}.
@@ -126,16 +126,24 @@
         \label{fig:bayer}
       \end{figure}
 
-    \subsection{Interacción de la radiación de partículas con la materia}
-      
+    \subsection{Interacción de la radiación de partículas con la materia}\label{sec:intro:radiation}
+      %TODO: Completar el GAP que hay acá
 
-    \subsection{Rayos cósmicos}
+      En este contexto, se definirá un evento como los efectos que provoca en un sensor una única partícula.
+      Si la densidad de eventos en una imagen es baja\footnote{En relación con el tamaño de los eventos},
+      es posible identificar eventos a partir de los pixeles de una vecindad,
+      debido a que se desprecia la probabilidad de encontrar un píxel que haya acumulado carga de dos eventos.
+
+      En caso de haber una densidad de eventos mayor, se debe hacer uso de otros métodos como técnicas basadas en \emph{machine learning}
+      e inteligencia artificial \cite{ROE2005577}.  % FIXME: No estoy muy seguro de que este sea el caso jajaja.
+      
+    \subsection{Picos $K_{\alpha}$ y $K_{\beta}$}\label{sec:intro:peaks}
+      %TODO: Completar sección
+
+    \subsection{Rayos cósmicos}\label{sec:intro:cosmic_ray}
       Los rayos cósmicos son partículas que llegan desde el espacio y bombardean constantemente la Tierra desde todas direcciones.
       La mayoría de estas partículas son protones o núcleos de átomos.
       Al interactuar con la atmósfera terrestre, estas partículas generan una cascada de muónes %TODO: escribir esto un poco mejor
-
-
-    \subsection{Picos $K_{\alpha}$ y $K_{\beta}$}
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \section{Configuración experimental}\label{sec:conf_exp}
@@ -151,14 +159,13 @@
       Debido a que cada píxel presenta una electrónica separada, se tomó una foto.
     %TODO: además poner todos los resultados anteriores que me pertimiteron entender cómo funciona todo
 
-    \subsection{Raspberry}
+    \subsection{Raspberry}\label{sec:conf_exp:raspberry}
       Se utilizó una Raspberry Pi modelo B, con una memoria micro SD de \SI{16}{\giga\byte}, para la obtención de imágenes.
       Debido a la resolución de las imágenes, la profundidad de bits de la imagenes y del tamaño del sistema operativo \emph{Raspbian}, 
-      la memoria disponible
-      permitió almacenar del orden de 1000 fotografías en simultáneo.
+      la memoria disponible permitió almacenar del orden de 1000 fotografías en simultáneo.
 
     %TODO: Para un informe por ahí es conveniente poner los detalles de la raspistill y la librería en python
-    \subsection{Librería raspiraw}
+    \subsection{Librería raspiraw}\label{sec:conf_exp:raspiraw}
       Para la adquisicón de datos se utilizó la librería {\it raspiraw}\cite{raspiraw} debido a la rapidez con la que se toman los datos.
       En el apéndice~\ref{sec:ap_alternatives} se muestran otras alternativas que son más lentas para la toma de datos,
       pero que pueden resultar más simples y sencillas de implementar.
@@ -175,7 +182,7 @@
       Cada píxel se representa mediante un número de $10$~bits (ver sección \ref{sec:conf_exp:CMOS}),
       En una misma columna, los píxeles son agrupados de a $4$, formando una estructura de $5$~bytes.
       En los primeros $4$~bytes se encuentran los bits más significativos de los 4 píxeles que conforman la estructura.
-      El quinto byte contiene los últimos $2$~bits menos significativos de cada píxel.
+      El quinto byte contiene los últimos $2$~bits menos significativos de cada píxel.\cite{picamera}
       La manera en la que los bits están ordenados en un grupo se muestra en la Fig.~\ref{fig:arreglo}
 
       \begin{figure}[h]
@@ -207,19 +214,19 @@
 
       %\paragraph{Ganancia}
 
-    \subsection{Emisor de rayos X}
+    \subsection{Emisor de rayos X}\label{sec:conf_exp:x-rays}
       Para la calibración de la carga dada por el detector CMOS como función de la energía se utilizó un emisor de rayos Xavier
       %TODO: Explicar un poco cómo funciona y decir que es de Cu.
   
-    \subsection{Observación de rayos cósmicos.}
-      Utilizando la librería es posible idenficar eventos en simultaneidad con la toma de fotos,
+    \subsection{Observación de rayos cósmicos.}\label{sec:conf_exp:cosmic_ray}
+      Utilizando la librería es posible idenficar eventos en simultaneo con la toma de imágenes,
       por lo que se implementó un sistema que guarde solamente las imágenes que poseen pixeles que superen un umbral establecido.
-      Debido al ruido de fondo, dicho umbral se ajustó en $75$ Unidades de ADC.
-
-      Como se verá en la sección \ref{sec:}
+      Debido al ruido de fondo, dicho umbral se ajustó en $75$ Unidades de ADC. 
+      Como se verá en la sección \ref{sec:results:cosmic_ray}, con esta configuración fue posible detectar eventos,
+      por lo que el umbral establecido resultó válido y suficiente.
   
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-  \section{Resultados}\label{sec:results}
+  \section{Resultados y discusión}\label{sec:results}
     Para probar el correcto funcionamiento de la librería, se utilizó el poder de procesamiento en dos aplicaciones diferentes.
     Una de ellas consistió en detectar Rayos Cósmicos, y la otra la de observar los picos $K_{\alpha}$ y $K_{\beta}$ de diferentes elementos.
 
@@ -244,44 +251,49 @@
       esta identificación y asociación nos permitió hacer una calibración de energía como función del canal.
       tal como se muestra en la Fig.~\ref{fig:spectrum_x-ray}.
       
-    \begin{figure}[h]
-      \includegraphics[width=0.47\textwidth]{figures/x-ray_spectrum.pdf}
-      \caption{Espectro patronum!}
-      \label{fig:spectrum_x-ray}
-    \end{figure}
+      \begin{figure}[h]
+        \includegraphics[width=0.47\textwidth]{figures/x-ray_spectrum.pdf}
+        \caption{Espectro patronum!}
+        \label{fig:spectrum_x-ray}
+      \end{figure}
 
-    Conociendo la energía característica de cada uno de estos picos, % TODO: insertar referencia
-    se realizó una calibración del valor raw de un pixel como función de la carga (energía) depositada.
-    % FIXME: Poner la consideración de que el fotón se frena
-    Esta calibración se muestra en la Fig.~\ref{fig:x-ray_calibration}
+      Conociendo la energía característica de cada uno de estos picos, % TODO: insertar referencia
+      se realizó una calibración del valor raw de un pixel como función de la carga (energía) depositada.
+      % FIXME: Poner la consideración de que el fotón se frena
+      Esta calibración se muestra en la Fig.~\ref{fig:x-ray_calibration}
 
-    \begin{figure}[h]
-      \includegraphics[width=0.47\textwidth]{figures/x-ray_calibration} %FIXME: Poner el valor de la pendiente
-      \caption{Calibración del canal del sensor como función de la energía de los picos $K_{\alpha}$ y $K_{\beta}$ encontrados.
-        En el mismo se puede apreciar que la relación es lineal y la relación carga por unidad de ADC obtenida es de $ $ %FIXME: Poner valor
-      }
-      \label{fig:x-ray_calibration}
-    \end{figure}
+      \begin{figure}[h]
+        \includegraphics[width=0.47\textwidth]{figures/x-ray_calibration} %FIXME: Poner el valor de la pendiente
+        \caption{Calibración del canal del sensor como función de la energía de los picos $K_{\alpha}$ y $K_{\beta}$ encontrados.
+          En el mismo se puede apreciar que la relación es lineal y la relación carga por unidad de ADC obtenida es de $ $ %FIXME: Poner valor
+        }
+        \label{fig:x-ray_calibration}
+      \end{figure}
 
     \subsection{Medición de Rayos Cósmicos}\label{sec:results:cosmic_ray}
+      Utilizando la librería se pudo encontrar $N$ %TODO: Cambiar poner el valor
+      eventos en completa oscuridad, y sin la presencia de fuentes radioactivas cerca.
+      Estos eventos son asociados a muones generados en la parte más alta de la atmósfera debido a los rayos cósmicos.
+      En la Fig.~\ref{fig:cosmic_ray} se muestra uno de los eventos detectados.
 
+      \begin{figure}[h]
+        \includegraphics[width=0.47\textwidth]{figures/06-04-18_09-27-42.pdf} % TODO: Poner para que salga pixelada :(
+        \caption{Recorte de una imagen tomada en la que se observa un evento.
+        En este caso el color negro representa el 0 unidades de ADC, y el color blanco, 176 unidades de ADC.
+        } %TODO: Pongo la equivalencia en electrones?
+        \label{fig:cosmic_ray}
+      \end{figure}
 
-    \begin{figure}[h]
-      \includegraphics[width=0.47\textwidth]{figures/06-04-18_09-27-42.pdf} % TODO: Poner los pixeles :(
-      \caption{Recorte de una imagen tomada en la que se observa un evento.}
-      \label{fig:cosmic_ray}
-    \end{figure}
-
-    Debido a la baja estadística que se presenta sobre los rayos cósmicos no resulta viable calcular la frecuencia
-    con la que estos eventos suceden.
-
+      Debido a la baja estadística que se presenta sobre los rayos cósmicos no resulta viable calcular la frecuencia
+      con la que estos eventos suceden.
+      
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \section{Conclusiones}
-
+    Las pruebas en humanos empezaran pronto...
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-  \bibliographystyle{siam}
+  \bibliographystyle{unsrt}
   \bibliography{bibliography}
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
