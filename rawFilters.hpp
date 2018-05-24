@@ -5,7 +5,7 @@
 
 namespace raw{
 
-    ///
+    ///FIXME: toma en cuentra TODOS los valores para el promedio, no solo los valores que ha sumado
     int substract_mean_per_column(raw::rawPhoto_t &photo, raw::pixelValue_t top = 0)
     {
         for(unsigned int x=0; x < photo.getWidth(); x++) {
