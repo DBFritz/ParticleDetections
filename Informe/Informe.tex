@@ -65,14 +65,23 @@
   }
   \date{\today}
   \renewcommand{\maketitlehookd}{
-    \begin{abstract}
-      Se utilizaron sensores CMOS para la detección de eventos con partículas para una descripción cualitativa y esquemática.
-        Se analizó la dependencia con los distintos parámetros de la cámara y en base a esto se decidió una configuración de trabajo.
+    \begin{abstract}\noindent
+      Se detectaron interacciones de sensores CMOS-APS comerciales y partículas.
+      Se analizó la dependencia con los distintos parámetros de control de la cámara y en base 
+      a esto se decidió una configuración de trabajo.
+      
+      \noindent
+      Gracias a esto se caracterizó y se calibró el sensor para la configuración
+      utilizada, mediante la implementación de la librería en C++ con filosofía de
+      programación orientada a objetos. Utilizando esta librería se observó la presencia 
+      los picos de emisión de rayos X $K_{\alpha}$ y $K_{\beta}$ del Cu y
+      los picos $K_{\alpha}$ del Fe y del Ca.
+      La determinación de estos picos permitió hacer la correcta calibración de carga depositada en
+      función del valor de los píxeles.
 
-      Gracias a esto se pudo caracterizar y calibrar el sensor para la configuración utilizada mediante la implementación de la librería
-        en C++ con filosofía de Programación Orientada a Objetos.
-        Utilizando esta librería se observó la presencia de eventos producidos por rayos cósmicos y
-        se observaron los picos $K_{\alpha}$ y $K_{\beta}$ del Cu y los picos $K_{\alpha}$ del Fe y Ca.
+      \noindent
+      De forma análoga, se utilizó la librería para la detección de interacciones del sensor con partículas
+      producidas por rayos cósmicos.
       %TODO: ABSTRACT
     \end{abstract}
   }
@@ -98,12 +107,11 @@
     sistemas de seguridad y un sinfín de aplicaciones más.
     En el ámbito científico, estos sensores están comenzando a tener relevancia \cite{PerezCMOS},
     ya que permiten realizar estudios de dosimetría, calcular actividad de muestras radioactivas y control de reactores nucleares
-    a un coste inferior que los CCDs utilizados en los detectores de partículas. %FIXME: cambiar detectores de part.
+    a un coste inferior que los CCDs utilizados para determinar la carga depositada en las interacciones sensor-partícula. %FIXME: cambiar detectores de part.
 
     En base a esto se propone implementar una librería con filosofía de programación orientada a objetos
-    capaz de hacer uso de estos sensores CMOS para la detección de eventos de partículas.
-
-    %TODO: BERTOU: Hablar de detección de eventos es algo super genérico. Por ahí debería aclararlo... :\
+    capaz de hacer uso de estos sensores CMOS para la detección de interacciones de partículas con el sensor,
+    y poder estimar parámetros como el número de eventos en una imagen (fotograma) y la carga de estos eventos.
 
     \subsection{Sensores CMOS-APS}\label{sec:intro:CMOS_sensor}
       Un sensor de píxeles activos (APS por sus siglas en inglés) es un sensor que detecta la radiación utilizando tecnología CMOS.
@@ -113,15 +121,9 @@
       Estos sensores consisten en un arreglo matricial de fotodiodos,
       que producen una corriente de electrones que varía en función de la intensidad de luz recibida,
       basándose en el efecto fotoelectrico para la generación de pares electrón-hueco.
-      %TODO: BERTOU: Concluir con fotos
-      
-      %Esto quedó algo descolgado
       Por cada fotodiodo, se incorpora un amplificador y un conversor analógico digital (ADC) para la lectura de los datos.
-      %FIXME: Es por cada fotodiodo o por cada fila? Compliqueti
 
-    \subsubsection{Filtro de Bayer}\label{sec:intro:bayer}
-
-      %Poner que no tiene nada de relevancia para nuestros resultados. Hablar sobre primeros estudios. Ref apéndice A
+    \subsubsection*{\hspace{5mm}Filtro de Bayer}\label{sec:intro:bayer}
       Los sensores CMOS destinados para fotografías a color poseen un filtro de Bayer, 
       el mismo consiste en un arreglo de filtros rojos, verdes y azules dispuestos como se muestra en la Fig.~\ref{fig:bayer}.
       De esta forma, cada píxel posee la información de un único rango de longitudes de onda, 
@@ -141,8 +143,7 @@
       de los distintos parámetros a la hora del tomar una fotografía,
       tal como se describe en el apéndice~\ref{sec:ap_alternatives}.
 
-    \subsection{Detección de partículas con el sensor CMOS}\label{sec:intro:detection
-    }   
+    \subsection{Detección de partículas con el sensor CMOS}\label{sec:intro:detection}   
 
       Una partícula de energía que deposite una energía $E$
       es capaz de generar $E / a$ pares de electrón-hueco en el sensor
@@ -189,10 +190,12 @@
     \subsection{Rayos cósmicos}\label{sec:intro:cosmic_ray}
       Los rayos cósmicos son partículas que llegan desde el espacio y bombardean constantemente la Tierra desde todas direcciones.
       La mayoría de estas partículas son protones o núcleos de átomos.
-      Al interactuar con la atmósfera terrestre, estas partículas son capaces de producir hadrones cargados, neutrones,
-      fotones (rayos $\gamma$), muones, electrones y positrones, \cite{GriederCRAE}
+      Al interactuar con la atmósfera terrestre, los rayos cósmicos de alta energía (mayor a \SI{}{10^{20}\eV})
+      son capaces de producir hadrones cargados, neutrones, fotones (rayos $\gamma$),
+      muones (de \SI{1}{\giga \eV}), electrones y positrones (de \SI{1}{\giga \eV}), \cite{GriederCRAE}
       cuyos efectos son medibles.
       %TODO: Poner algunos valorcitos
+  
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \section{Configuración experimental}\label{sec:conf_exp}
@@ -201,7 +204,7 @@
       Se ha utilizado el sensor OmniVision OV5647 de la cámara Raspicam V1.3 cuyo precio ronda los 23 dólares.
       El sensor posee	$2592$x$1944$ píxeles, lo que le una resolución total de $5$ MP.
       El tamaño de un píxel de \SI{1.4}{\micro\meter} x \SI{1.4}{\micro\meter}.
-      El capacidad de carga máxima hasta llegar a saturación es de $4300$ electrones (\emph{Full Well Capacity}).
+      La capacidad de carga máxima hasta llegar a saturación es de $4300$ electrones (\emph{Full Well Capacity}).
       El sensor posee un ADC de 10 bits por píxel.
       El tamaño total por imagen raw es de unos \SI{6.4}{\mega\byte}
 
@@ -215,16 +218,9 @@
       En el apéndice~\ref{sec:ap_alternatives} se muestran otras alternativas que son más lentas para la toma de datos,
       pero que pueden resultar más simples y sencillas de implementar.
 
-      Los datos sin procesamiento (datos \emph{raw}) eran guardados con extensión raw.
-      Los mismos consistian en $1952$ filas de 3264~bytes.
-      Las últimas $8$ filas de datos no contienen información y no son utilizadas,
-      ya que sólo existen debido a que $1952$ es menor múltiplo de $16$
-      mayor a las $1944$ filas que posee el sensor (ver sección \ref{sec:conf_exp:CMOS}).
-      De la misma forma, los último $24$~bits de cada fila no son utilizados y deben ser descartados.
-      %TODO: Verificar la cuenta!
-
+      Los datos sin procesamiento (datos \emph{raw}) se almacenaron con extensión \emph{.raw}.
       El valor de carga acumulada por cada píxel se representa mediante un número de $10$~bits.
-      En una misma columna, los píxeles son agrupados de a $4$, formando una estructura de $5$~bytes.
+      En una misma fila, los píxeles son agrupados de a $4$, formando una estructura de $5$~bytes.
       En los primeros $4$~bytes se encuentran los bits más significativos de los 4 píxeles que conforman la estructura.
       El quinto byte contiene los últimos $2$~bits menos significativos de cada píxel.\cite{picamera}
       La manera en la que los bits están ordenados en un grupo se muestra en la Fig.~\ref{fig:arreglo}
@@ -236,12 +232,16 @@
         Los $40$~bits de los $4$ píxeles están distribuídos como ilustra la figura.
         Colores distintos corresponden a píxeles distintos.
 
-        En las filas se indica en número de byte (siendo $5$ en total).
-
         En cada celda se encuentra un número que representa el bit de información de un píxel,
         siendo 1 el bit menos signficativo (LSB) y 10 el bit más signficativo (MSB).}
         \label{fig:arreglo}
       \end{figure}
+
+      Estos datos consistían en $1952$ filas de 3264~bytes.
+      Las últimas $8$ filas de datos no contienen información y no son utilizadas,
+      ya que sólo existen debido a que $1952$ es menor múltiplo de $16$
+      mayor a las $1944$ filas que posee el sensor (ver sección \ref{sec:conf_exp:CMOS}).
+      De la misma forma, los último $24$~bits de cada fila no son utilizados y deben ser descartados.
 
       Los parámetros que permite variar esta librería son:
       \paragraph{Tiempo de exposición:}
@@ -260,8 +260,8 @@
 
     \subsection{Emisor de rayos X}\label{sec:conf_exp:x-rays}
       En la Fig.\ref{fig:photo_xray} se muestra la configuración experimental utulizada.
-      La cámara de la Raspberry Pi se colocó en un recipiente de plástico opaco a la visible
-      para evitar los fotones en ese rango de longitudes de onda.
+      La cámara de la Raspberry Pi se colocó en un recipiente de plástico opaco a la luz visible,
+      para evitar detectar los fotones en ese rango de longitudes de onda.
       El equipo utilizado posee dos ventanas, se utilizó la menos coherente para facilitar el proceso
       de alineado del haz con la cámara. 
 
@@ -271,10 +271,15 @@
       máximos locales en los valores que corresponden a diferencias de niveles energéticos.
       
       Para la medición de los picos de Fe y Ca se intercaló una lámina de Fe y una concha marina (rica en Ca).
+      Debido a que los rayos X se generan en base al Cu, los picos de emisión también estarán presentes en
+      el espectro de los demás elementos.
 
       \begin{figure}[h]
         \includegraphics[width=0.47\textwidth]{figures/IMG_20180412_173110355_HDR}
-        \caption{Configuración experimental utilizada. Se } %TODO: Completar
+        \caption{Configuración experimental utilizada para la detección de rayos X.
+        El sensor se colocó dentro de un recipiente plástico para protogerla de la luz visible.
+        El pie permitía alinear correctamente el haz de fotones con la cámara.
+        }
         \label{fig:photo_xray}
       \end{figure}
 
@@ -284,13 +289,15 @@
       Debido al ruido de fondo, dicho umbral se ajustó en $75$ Unidades de ADC. 
       Como se verá en la sección \ref{sec:results:cosmic_ray}, con esta configuración fue posible detectar eventos,
       por lo que el umbral establecido resultó válido y suficiente.
-      Se tomaron 2 imágenes por segundo, pero estas eran capaces de procesarse a una velocidad
-      del orden de 1 imagen cada 3 segundos, por lo que la frecuencia de eventos debido a rayos cósmicos detectado sea menor a
-      la frecuencia de eventos esperada, que es del orden de \SI{100}{\meter^{-2}\second^{-1}}.
+      Se tomaron 2 imágenes por segundo, pero éstas eran procesadas a una velocidad
+      del orden de 1 imagen cada 3 segundos, por lo que se espera que la frecuencia de eventos
+      detectados debido a rayos cósmicos sea menor a la frecuencia de eventos conocida,
+      que es del orden de \SI{100}{\meter^{-2}\second^{-1}}. %FIXME: Me ayudaría poner una referencia.
+      %FIXME: Digo que frecuencia y la mido en Hz/area
 
     \subsection{Librería propia}\label{sec:conf_exp:library}
       Para el procesamiento de las imagenes de raspiraw se implementó una librería en C++. En esta librería las imágenes pasan
-      a ser objetos representados por matriz (arreglo modulado). Cada foto presenta un ancho, un largo y un conjunto de datos que
+      a ser objetos representados por una matriz (arreglo modulado). Cada foto presenta un ancho, un largo y un conjunto de datos que
       corresponder al valor de cada pixel. En esta clase se definen los métodos (funciones) para encontrar eventos, basándose en
       pixeles adyacentes, para recortar imágenes, encontrar el valor medio, la mediana y hasta para encontrar
       la desviación estándar de los valores de los pixeles.
@@ -299,7 +306,7 @@
       posición vertical y valor). Para esta clase se definen métodos que permiten
       obtener la carga total de un evento, definida como la suma de los valores de los pixeles;
       para obtener el centro de masa del evento,
-      definida como una promedio de los vectores posiciones de cada pixel,
+      definida como el promedio de los vectores posiciones de cada pixel,
       ponderado con el valor del pixel;
       para determinar el radio de un evento, definido como la raiz cuadrada de la varianza de las posiciones
       de los pixeles al centro de masa, también ponderado por el valor de cada pixel.
@@ -312,47 +319,51 @@
     Se probó el correcto funcionamiento de la librería en tres aplicaciones diferentes.
     En primer lugar se determinó el ruido de fondo de la cámara,
     otra de ellas consistió en observar los picos $K_{\alpha}$ y $K_{\beta}$ de diferentes elementos,
-    y por último, en detectar Rayos Cósmicos .
+    y por último, en detectar rayos cósmicos.
 
     \subsection{Determinación del ruido de fondo}\label{sec:results:background}
-      Se realizó un histograma de los valores de los pixeles de una única para verificar la distribución y la dispersión
-      del ruido de cada imagen. Los resultados obtenidos se muestran en la Fig.~\ref{fig:histogram}
+      Se realizó un histograma de los valores de los pixeles de una única imagen,
+      para verificar la distribución y la dispersión del ruido.
+      Los resultados obtenidos se muestran en la Fig.~\ref{fig:histogram}
 
       \begin{figure}[h]
         \includegraphics[width=0.45\textwidth]{figures/background_histo.pdf}
         \caption{Histograma de los valores de los pixeles con un ajuste gaussiano.
           El histograma se muestra en escala logarítmica.
-          La gaussiana se encuentra centrada en $14.8(3)$ unidades de ADC,
-          mientras que su dispersión es $2.5(3)$ unidades de ADC.}
+          La gaussiana se encuentra centrada en $14.9(3)$ unidades de ADC,
+          mientras que su dispersión es $2.6(3)$ unidades de ADC.}
         \label{fig:histogram}
       \end{figure}
       
-      Se tomaron 30 imágenes con tiempo de exposición de \SI{0.5}{\milli\second} a 2 cuadros por segundos (\emph{fps}).
+      Se tomaron 30 imágenes con tiempo de exposición de \SI{500}{\milli\second} a 2 cuadros por segundos (\emph{fps}).
       Se promediaron las 30 imágenes para obtener una estimación sobre el ruido de fondo con la configuración dada. 
       En la Fig.~\ref{fig:background} se muestra el promedio por píxel de las fotografías tomadas.
 
       \begin{figure}[h]
         \includegraphics[width=0.47\textwidth]{figures/background.jpg}
-        \caption{Promedio de las 30 imagenes.
-          En la misma se observa una dependencia del valor promedio como función de la posición.
+        \caption{Promedio de las 30 imagenes del fondo. 
+          Se observa una dependencia del valor promedio como función de la posición.
           Esta dependencia está fuertemente relacionada con la columna del píxel. }
         \label{fig:background}
       \end{figure}
-      %FIXME: La foto de background.png está mal hecha, la nueva foto se encuentra en la carpeta results.
     
       En base a la fuerte dependencia del valor medio de los pixeles como función de la columna,
-      se implementó una función que permite sustraer, a cada columna, la mediana por columna.
-      Esto se hizo con la premisa de que, en una misma columna,
-      los pixeles que poseen información de eventos son menos que el resto.
-      Esta función será aplicada a cada procesamiento de datos de imágenes.
-      El histograma de la misma imagen que en la Fig.~\ref{fig:histogram}, con la respectiva sustracción
-      de la mediana por columna, se muestra en la Fig.~\ref{fig:histogram_subs}
+      se implementó una función que permite sustraer, a cada columna, el valor medio por columna.
+      Esta función será aplicada a cada procesamiento de datos de imágenes, salvo que se indique lo contrario.
+      Se recalculó el histograma de la misma imagen que en la Fig.~\ref{fig:histogram}, con la respectiva sustracción
+      de la mediana por columna. Dicho histograma se muestra en la Fig.~\ref{fig:histogram_subs}.
 
       \begin{figure}[h]
         \includegraphics[width=0.47\textwidth]{figures/background_histo_subs.pdf}
-        \caption{Histograma de los valores de los pixeles, con otro ajuste gaussiano.}
+        \caption{Histograma de los valores de los pixeles, con otro ajuste gaussiano.
+        El histograma se encuentra en escala logarítmica.
+        Los valores obtenidos del ajuste se muestran en el gráfico.}
         \label{fig:histogram_subs} %TODO: Ampliar el caption.
       \end{figure}
+
+      En este caso se observa un comportamiento más gaussiano, que la dispersión es un $28\%$ menor.
+      El centro del ajuste encuentra en $-0.48(4)$~unidades de ADC, esto se debe a la asimetría del histograma original.
+      
 
     \subsection{Mediciones de picos $K_{\alpha}$ y $K_{\beta}$ y calibración de energía}\label{sec:results:peaks}
       Se analizó el espectro de Cu, Fe y Ca utilizando la librería propia.
@@ -374,18 +385,12 @@
       se realizó una calibración del valor raw de un pixel como función de la carga (energía) depositada.
       Esta calibración se muestra en la Fig.~\ref{fig:x-ray_calibration}
 
-      %TODO: Sacar esta porquería y explicar más cómo fue el setup experimental
-      En estos gráficos no fue posible el análisis de la atenuación debido a la presencia de Fe ni de Ca
-      ya que la distancia del sensor a la fuente fueron distintas en todos los casos, y por lo tanto,
-      el ángulo sólido subtendido por el detector fue diferente en todos los casos.
-      Un análisis más cuidadoso sobre las intensidades permitiría encontrar el coeficiente de atenuación para distintos elementos.
-
       \begin{figure}[h]
         \includegraphics[width=0.47\textwidth]{figures/x-ray_calibration}
         \caption{Calibración del canal del sensor como función de la energía de
           los picos $K_{\alpha}$ y $K_{\beta}$ encontrados.
           En el mismo se puede apreciar que la relación es lineal,
-          y la relación carga por unidad de ADC obtenida es de \SI{17.50(3)}{\eV} %FIXME: Poner valor
+          y la relación carga por unidad de ADC obtenida es de \SI{17.50(3)}{\eV}
         }
         \label{fig:x-ray_calibration}
       \end{figure}
@@ -450,15 +455,15 @@
     Por pixel, se tomó el máximo valor de las 1800 imágenes, generando la imagen que se muestra en la Fig.~\ref{fig:raspivid}
 
     \begin{figure}[h]
-      \includegraphics[width=0.47\textwidth]{figures/Alpha_1m.png} % TODO: Poner para que salga pixelada :(
+      \includegraphics[width=0.47\textwidth]{figures/Alpha_1m.png}
       \caption{Imagen de los eventos con exposición de 1 minuto ante una fuente de $^{241}$Am,
       que emite radiación alfa de \SI{5.486}{\mega\eV}.
       Para la composición de la misma se tomó el valor máximo por pixel de cada fotograma del video.
-      } %TODO: Pongo la equivalencia en electrones?
+      }
       \label{fig:raspivid}
     \end{figure}
 
-  \subsection{Picamera, librería en Python} % TODO: Terminar esta porquería
+  \subsection{Picamera, librería en Python} % TODO: Terminar estO
     La librería Picamera presenta en su documentación una forma para obtener los datos \emph{raw}, sin procesamiento previo.
     Esta librería, debido a que está dedicada para la toma de fotografías, permite controlar los valores de ISO, tiempo de exposición,
     balance de blancos.
