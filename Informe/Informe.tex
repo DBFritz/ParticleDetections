@@ -66,17 +66,15 @@
   \date{\today}
   \renewcommand{\maketitlehookd}{
     \begin{abstract}\noindent
-      Los sensores CMOS constituyen una alternativa de bajo precio para la detección de eventos de partícuals.
+      Los sensores CMOS constituyen una alternativa de bajo precio para la detección de interacciones de partículas.
       En este trabajo se implementó una librería para utilizar el sensor OmniVision OV5647
       de la cámara Raspicam V1.3, con una Raspberry Pi.
-      \\ \noindent
-      Utilizando esta librería se observó la presencia de los picos de emisión de rayos X
+      Utilizando esta librería se observaron los picos de emisión de rayos X
       $K_{\alpha}$ y $K_{\beta}$ del Cu y los picos $K_{\alpha}$ del Fe y del Ca.
       La determinación de estos picos permitió hacer la correcta calibración de carga depositada en
       función del valor de los píxeles.
-      Además se utilizó la librería para la detección de interacciones del sensor con partículas
-      producidas por rayos cósmicos.
-      %TODO: ABSTRACT
+      Finalmente se utilizó la librería para la detección de interacciones con partículas secundarias
+      producidas por rayos cósmicos con el sensor.
     \end{abstract}
   }
 
@@ -101,11 +99,11 @@
     sistemas de seguridad y un sinfín de aplicaciones más.
     En el ámbito científico, estos sensores están comenzando a tener relevancia \cite{PerezCMOS},
     ya que permiten realizar estudios de dosimetría, calcular actividad de muestras radioactivas y control de reactores nucleares
-    a un coste muy inferior que al de los CCDs utilizados para determinar la carga depositada en las interacciones sensor-partícula.
+    a un coste muy inferior que el de los CCDs utilizados para determinar la carga depositada en las interacciones sensor-partícula.
     Como en experimentos como DAMIC (búsqueda de materia oscura)\cite{DAMIC}
     o CONNIE (medición de neutrinos)\cite{CONNIE}.
 
-    En base a esto se propone implementar una librería con filosofía de programación orientada a objetos
+    En base a esto se decidió implementar una librería con filosofía de programación orientada a objetos
     capaz de hacer uso de estos sensores CMOS para la detección de interacciones de partículas con el sensor,
     y poder estimar parámetros como el número de eventos en una imagen (fotograma) y la carga de estos eventos.
 
@@ -136,14 +134,16 @@
       \end{figure}
 
       Si bien este filtro resulta invisible a los rayos X,
-      y no es relevante en el caso de un snsor CMOS para detectar partículas;
+      y no es relevante en el caso de un sensor CMOS para detectar partículas;
       el distinguir fotografías por sus colores permitió caracterizar
       de los distintos parámetros a la hora del tomar una fotografía,
       tal como se describe en el apéndice~\ref{sec:ap_alternatives}.
 
+      %TODO: hablar de la lente.
+
     \subsection{Detección de partículas con el sensor CMOS}\label{sec:intro:detection}   
 
-      Una partícula de energía que deposite una energía $E$ en el sensor,
+      Una partícula que deposite una energía $E$ en el sensor,
       es capaz de generar $E / a$ pares de electrón-hueco,
       siendo $a$ la energía promedio para generar un par electrón-hueco en el material
       \footnote{\SI{3.7}{\eV} en el caso del silicio\cite{groom2004temperature}}.
@@ -167,7 +167,7 @@
       $\ket{2p}$ al estado $\ket{1s}$ y a la transición $\ket{3p}$ a $\ket{1s}$, respectivamente.
       
       En el caso particular del Cu, Fe y Ca, 3 elementos que usaremos a continuación,
-      los valores de energía de los fotones emitidos se pueden encuentrar
+      los valores de energía de los fotones emitidos se pueden encontrar
       en la Tabla~\ref{tab:xraypeaks}.
 
       \begin{table}[h]
@@ -186,11 +186,10 @@
     \subsection{Rayos cósmicos}\label{sec:intro:cosmic_ray}
       Los rayos cósmicos son partículas que llegan desde el espacio y bombardean constantemente la Tierra desde todas direcciones.
       La mayoría de estas partículas son protones o núcleos de átomos.
-      Al interactuar con la atmósfera terrestre, los rayos cósmicos de alta energía (mayor a \SI{}{10^{20}\eV})
+      Al interactuar con la atmósfera terrestre, los rayos cósmicos de alta energía
       son capaces de producir hadrones cargados, neutrones, fotones (rayos $\gamma$),
       muones (de 1 a 5 \si{\giga \eV}), electrones y positrones (de 1 a 20 \si{\mega \eV}), \cite{GriederCRAE}
       cuyos efectos son medibles.
-      %TODO: Poner algunos valorcitos
   
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -223,12 +222,10 @@
 
       \begin{figure}[h]
         \includegraphics[width=0.47\textwidth]{figures/bayer_bytes.pdf}
-        \caption[LoF entry]{Representación de un grupo 4 píxeles.
-
+        \caption{Representación de un grupo 4 píxeles.
         Los $40$~bits de los $4$ píxeles están distribuídos como ilustra la figura.
         Colores distintos corresponden a píxeles distintos.
-
-        En cada celda se encuentra un número que representa el bit de información de un píxel,
+        En cada celda se representa el bit de información de un píxel con un número,
         siendo 1 el bit menos signficativo (LSB) y 10 el bit más signficativo (MSB).}
         \label{fig:arreglo}
       \end{figure}
@@ -240,7 +237,7 @@
       De la misma forma, los último $24$~bits de cada fila no son utilizados y deben ser descartados.
 
       Esta librería permite cambiar varios parámetros de la toma de datos.
-      En partícular, los parámetros que se modificaron son son:
+      En partícular, los parámetros que se modificaron son:
       \paragraph{Tiempo de exposición:}
         Se define como el tiempo en el que sensor acumula carga.
         A mayor tiempo de exposición, mayor es la carga leída por el detector,
@@ -259,7 +256,7 @@
     \subsection{Librería propia}\label{sec:conf_exp:library}
       Para el procesamiento de las imagenes de raspiraw se implementó una librería en C++. En esta librería las imágenes pasan
       a ser objetos representados por una matriz (arreglo modulado). Cada foto presenta un ancho, un largo y un conjunto de datos que
-      corresponder al valor de cada pixel. En esta clase se definen los métodos (funciones) para encontrar eventos, basándose en
+      corresponde al valor de cada pixel. En esta clase se definen los métodos (funciones) para encontrar eventos, basándose en
       pixeles adyacentes, para recortar imágenes, encontrar el valor medio, la mediana y hasta para encontrar
       la desviación estándar de los valores de los pixeles.
 
@@ -300,20 +297,20 @@
         \label{fig:photo_xray}
       \end{figure}
 
-    \subsection{Observación de rayos cósmicos.}\label{sec:conf_exp:cosmic_ray}
-      Utilizando la librería propia desarrollada e en el marco de este proyecto (ver sección \ref{sec:conf_exp:library}),
+
+    \subsection{Observación de rayos cósmicos}\label{sec:conf_exp:cosmic_ray}
+      Utilizando la librería propia desarrollada en el marco de este proyecto (ver sección \ref{sec:conf_exp:library}),
       es posible idenficar eventos en paralelo con la toma de imágenes,
-      por lo que se implementó un sistema que guarde solamente las imágenes que poseen pixeles que superen un umbral establecido.
-      Permitiendo así medir durante días sin saturar la memoria, eliminando las fotos vacías de eventos.
-      Debido al ruido de lectura, dicho umbral se ajustó en $75$ Unidades de ADC. %FIXME: BERTOU: sección 3.1!? 
+      por lo que se implementó un sistema que guarde solamente las imágenes que poseen pixeles que superen un umbral establecido,
+      permitiendo así medir durante días sin saturar la memoria, eliminando las fotos vacías de eventos.
+      Debido al ruido de lectura, dicho umbral se ajustó en $75$~unidades de ADC.
       Como se verá en la sección \ref{sec:results:cosmic_ray}, con esta configuración fue posible detectar eventos,
       por lo que el umbral establecido resultó válido y suficiente.
       Se tomaron 2 imágenes por segundo, pero éstas eran procesadas a una velocidad
       del orden de 1 imagen cada 3 segundos, por lo que se espera que la frecuencia de eventos
-      detectados debido a rayos cósmicos sea notablemente menor a la frecuencia de eventos conocida,
+      detectados debido a rayos cósmicos sea notablemente menor a la frecuencia de eventos por unidad de área esperada,
       que es del orden de \SI{100}{\meter^{-2}\second^{-1}}
       (para una sección de \SI{10}{\milli\meter^2}, casi 4 eventos por horas).
-      %FIXME: Digo que frecuencia y la mido en Hz/area
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
   \section{Resultados y discusión}\label{sec:results}
@@ -338,7 +335,7 @@
         \label{fig:histogram}
       \end{figure}
 
-      Se observa que el ruido está muy alejado de uin comportamiento de ruido blanco (gaussiano),
+      Se observa que el ruido está muy alejado de un comportamiento de ruido blanco (gaussiano),
       indicando la presencia de un FPN (ruido de patrón fijo).
       
       Se tomaron 30 imágenes con tiempo de exposición de \SI{500}{\milli\second} a 2 cuadros por segundos (\emph{fps}).
@@ -359,15 +356,15 @@
       Se recalculó el histograma de la misma imagen que en la Fig.~\ref{fig:histogram}, con la respectiva sustracción
       de la mediana por columna. Dicho histograma se muestra en la Fig.~\ref{fig:histogram_subs}.
 
-      \begin{figure}[h]
+      \begin{figure}[h!]
         \includegraphics[width=0.47\textwidth]{figures/background_histo_subs.pdf}
-        \caption{Histograma de los valores de los pixeles, después de corregir por columna, con un ajuste gaussiano.
-        El histograma se encuentra en escala logarítmica.
+        \caption{Histograma de los valores de los pixeles, después de corregir por columna,
+        con un ajuste gaussiano.
         Los valores obtenidos del ajuste se muestran en el gráfico.}
-        \label{fig:histogram_subs} %TODO: Ampliar el caption.
+        \label{fig:histogram_subs}
       \end{figure}
 
-      En este caso se observa un comportamiento notablemente más gaussiano, con una dispersión es un $28\%$ menor.
+      En este caso se observa un comportamiento notablemente más gaussiano, con una dispersión un $28\%$ menor.
 
     \subsection{Mediciones de picos $K_{\alpha}$ y $K_{\beta}$ y calibración de energía}\label{sec:results:peaks}
       Se analizó el espectro de Cu, Fe y Ca utilizando la librería propia, descripta en la sección \ref{sec:conf_exp:library}.
@@ -375,13 +372,13 @@
       En estos espectros fue posible identificar los picos $K_{\alpha}$ y $K_{\beta}$ de Cu y los picos $K_{\alpha}$ del Fe y del Ca,
       tal como se muestra en la Fig.~\ref{fig:spectrum_x-ray}.
 
-      \begin{figure}[h]
+      \begin{figure}[h!]
         \includegraphics[width=0.47\textwidth]{figures/x-ray_spectrum.pdf}
-        \caption{Espectro detectado por el sensor. \\
+        \caption{Espectros detectados por el sensor.
           El espectro del Cu corresponde al espectro de emisión de la fuente utilizada.
-          Los demás espectros se obtuvieron colocando una placa de Fe y de Ca, respectivamente,
+          Los demás espectros se obtuvieron colocando una placa de Fe y de Ca,
           entre la fuente y el sensor.
-          En el gráfico ya se ha realizado la calibración entre energía y unidades de ADC mostrada en la Fig.\ref{fig:x-ray_calibration}}
+          En el gráfico se ha utilizado la calibración entre energía y unidades de ADC mostrada en la Fig.\ref{fig:x-ray_calibration}.}
         \label{fig:spectrum_x-ray}
       \end{figure}
 
@@ -389,30 +386,28 @@
       De la misma forma, este pico puede verse en el caso del espectro del Ca cuando éste fue ubicado lejos del sensor.
 
       Conociendo la energía característica de cada uno de estos picos \cite{xraybooklet},
-      y bajo la suposición que los electrones generados pierden todas su energía, % FIXME: Poner la consideración de que el fotón se frena
       se realizó una calibración del valor raw de un pixel como función de la carga (energía) depositada.
       Esta calibración se muestra en la Fig.~\ref{fig:x-ray_calibration}
 
-      \begin{figure}[h]
+      \begin{figure}[h!]
         \includegraphics[width=0.47\textwidth]{figures/x-ray_calibration}
         \caption{Calibración del canal del sensor como función de la energía de
           los picos $K_{\alpha}$ y $K_{\beta}$ encontrados.
           En el mismo se puede apreciar que la relación es lineal,
-          y la relación carga por unidad de ADC obtenida es de \SI{17.50(3)}{\eV}
+          y la relación carga por unidad de ADC obtenida es de \SI{17.50(3)}{\eV / ADC}
         }
         \label{fig:x-ray_calibration}
       \end{figure}
 
     \subsection{Medición de Rayos Cósmicos}\label{sec:results:cosmic_ray}
-      Utilizando la librería propia, se pudo encontrar $2$ %TODO: Poner el valor
+      Utilizando la librería propia, se pudo encontrar $2$
       eventos en 2 días seguidos, con la cámara en oscuridad y sin la presencia de fuentes radioactivas cerca,
       por lo que se asocia estos eventos a los rayos cósmicos.
-            %FIXME: No se puede asegurar que sean muones, sadly :'(
       En la Fig.~\ref{fig:cosmic_ray} se muestran ambos eventos detectados.
 
-      \begin{figure}[h]
+      \begin{figure}[h!]
         \centering
-        \includegraphics[width=0.47\textwidth]{figures/doble_evento.png} % TODO: Poner para que salga pixelada :(
+        \includegraphics[width=0.47\textwidth]{figures/doble_evento.png}
         \caption{Recortes de las imágenes tomadas en la que se observaron un evento de rayos cósmicos.
         En este caso el color negro representa el 0 unidades de ADC, y el color blanco, 180 unidades de ADC (\SI{3150}{\eV}).
         }
@@ -431,8 +426,9 @@
     Utilizando esta librería se observó la presencia de eventos producidos por rayos cósmicos y
     se observaron los picos $K_{\alpha}$ y $K_{\beta}$ del Cu y los picos $K_{\alpha}$ del Fe y Ca.
 
-    El alcance de esta librería es amplio. Uno de los posible usos es la detección de fuentes radioactivas, como el plomo,
-    en el agua. Además podría utilizarse como un contador de contador de Geiger barato.
+    El alcance de esta librería es amplio. Uno de los posible usos es la detección de plomo,
+    en el agua (vía observación del $^{210}Pb$).
+    Además podría utilizarse como un contador de Geiger de bajo costo.
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
   \bibliographystyle{unsrt}
@@ -443,24 +439,24 @@
     Se agradece la colaboración de Xavier Bertou por la experiencia brindada y por
     acompañar el trabajo en forma constante.
     A Miguel Sofo por la disponibilidad y por la ayuda a la hora de hacer mediciones.
-    % TODO: Agregar a alguien que Bertou me dijo pero me colgué
-    % Era del grupo de José por proveernos de los rayos X
     Al equipo de Fabricio Alcalde por proveernos e informarnos sobre el equipo de rayos X.
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \clearpage
   \appendix
   \section{Alternativas a Raspiraw}\label{sec:ap_alternatives}
-  
+  Antes de desarrollar la librería propia, se usaron alternativas disponibles en internet
+  para entender el funcionamiento de la Picamera.
   \subsection*{Raspistill y Raspivid}
     Ambos vienen por defectos instalados en el sistema operativo \emph{Raspbian}.
     Raspistill permite capturar fotografías en formato \emph{Joint Photographic Experts Group} (jpeg/jpg).
-    Si bien las imágenes tomadas presentan un post-procesamiento, Rapistill es capaz de añadir a la imagen los datos sin procesar (\emph{raw}),
+    Si bien las imágenes tomadas presentan un post-procesamiento, Rapistill es capaz de añadir a la imagen los datos sin procesar (\emph{raw}).
 
     Por el otro lado, raspivid permite grabar videos en formato \emph{H.264}.
     Este formato también presenta compresión de datos, al igual que \emph{.jpg},
     pero no existe parámetro que permita obtener las imágenes sin procesamiento.
-    Por lo solamente debe ser utilizado de manera ilustrativa y cuantitativa, pero no cuantitativa.
+    Por lo cual solamente puede ser utilizado de manera ilustrativa y cuantitativa,
+    pero no cuantitativa.
 
     Para verificar el funcionamiento del sensor, se expuso la cámara ante una fuente de rayos alfa ($^{241}$Am),
     removiendo previamente el sistema óptico de lentes que poseía la cámara \emph{picamera}.
@@ -476,14 +472,14 @@
       \label{fig:raspivid}
     \end{figure}
 
-  \subsection*{Picamera, librería en Python}% TODO: Terminar esto
+  \subsection*{Picamera, librería en Python}
     La librería Picamera presenta en su documentación una forma para obtener los datos \emph{raw}\cite{picamera}.
-    Esta librería, permite controlar los valores de ISO, tiempo de exposición,
+    Esta librería, permite controlar los valores de valores de ISO, tiempo de exposición,
     balance de blancos, resolución, entre otros parámetros para la toma de fotografías.
 
-    Como primera aproximación se estudió la dependencia de los histogramas de los valores de los pixeles
+    Como primera aproximación se estudió la dependencia de los histogramas de los valores \emph{raw} de los pixeles
     como función del ISO, tal como se muestra en la Fig.~11.(a).
-    En base a esto se concluye que el valor de ISO no es un post-procesamiento, ya que só influye en los datos \emph{raw}.
+    En base a esto se concluye que el valor de ISO no es un post-procesamiento, ya que no influye en los datos \emph{raw}.
     La curva de ISO$=800$ presenta una preferencia impar-par debido a la electrónica interna del sensor,
     de la cual no se hizo estudios posteriores.
 
@@ -508,8 +504,9 @@
       \label{fig:histo_picamera}
     \end{figure}
 
-    %TODO: Completar
-
+    Estos estudios confirman el potencial de los datos raw para los estudios de física considerados.
+    Sin embargo la toma de datos era muy lenta, lo que llevó a desarrollar de la librería descripta
+    en la sección \ref{sec:conf_exp:library}.
 \end{document}
 
     
