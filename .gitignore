@@ -19,5 +19,15 @@ Informe/*.out
 Informe/*.synctex.gz
 Informe/*.pdf
 
+#archivos auxiliares del informe
+Poster/*.aux
+Poster/*.bbl
+Poster/*.blg
+Poster/*.fdb_latexmk
+Poster/*.fls
+Poster/*.log
+Poster/*.out
+Poster/*.synctex.gz
+
 #Gnuplot
 fit.log
