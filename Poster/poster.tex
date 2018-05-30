@@ -7,17 +7,16 @@
 
 \documentclass{a0poster}
 
-\usepackage{fancytikzposter} 
-
+\usepackage{fancytikzposter}
 
 %%%%% --------- Change here if you want ---------- %%%%%
 %% margin for the geometry package, must be changed before using the geometry package
 %% default value is 4cm
-% \setmargin{4}
+ \setmargin{3}
 
 %% the space between the blocks
 %% default value is 2cm
-% \setblockspacing{2}
+ \setblockspacing{1.5}
 
 %% the height of the title stripe in block nodes, decrease it to save space
 %% default value is 3cm
@@ -80,9 +79,6 @@
 % \setinnerblocktitletextcolor{white}
 % \setinnerblocktitlefillcolor{colorthree}
 
-
-
-
 %%% size of the document and the margins
 %% A0
 % \usepackage[margin=\margin cm, paperwidth=118.9cm, paperheight=84.1cm]{geometry} 
@@ -107,14 +103,16 @@
 \usepackage{caption}
 \usepackage{subcaption}
 
+\usepackage{etoolbox}
+\patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
+
 \title{Detección y análisis de interacciones de partículas con sensores
 APS-CMOS mediante la implementación de una librería en C++}
 \author{Darío Federico Balmaceda\\
   Laboratorio Detección de Partículas y Radiación. Centro Atómico Bariloche\\
   \href{mailto:leschatten@gmail.com}{\texttt{leschatten@gmail.com}}
-  \vspace{100mm}
+  \vspace{115mm}
 }
-
 
 \begin{document}
 
@@ -127,7 +125,7 @@ APS-CMOS mediante la implementación de una librería en C++}
 \begin{tikzpicture}
   \initializesizeandshifts
   % \setxshift{15}
-  % \setyshift{15}
+   \setyshift{1}
 
 
   %% the title block, #1 - shift, the default value is (0,0), #2 - width, #3 - scale
@@ -143,8 +141,8 @@ APS-CMOS mediante la implementación de una librería en C++}
   % \ifthenelse{\equal{\template}{2}}{ 
   %   \addlogo[south west]{(2,0)}{6cm}{unibz_b.png}
   % }{
-     \addlogo[west]{(2,1.7)}{6cm}{figures/logoIB.eps}
-     \addlogo[east]{(-1.7,2.2)}{5cm}{figures/uncuyo.eps}
+     \addlogo[west]{(2,2.4)}{6cm}{figures/logoIB.eps}
+     \addlogo[east]{(-1.0,2.5)}{7.7cm}{figures/dpr.png}
   % }
 
   %% a block node, with the specified position (optional), title and the content
@@ -153,18 +151,68 @@ APS-CMOS mediante la implementación de una librería en C++}
 
   \blocknode
   {Introducción}%
-  {
-    %\begin{minipage}{0.5\linewidth}
-    %  \begin{tikzfigure}[Representación de un grupo de 4 píxeles]
-    %    \includegraphics[width=0.8\textwidth]{figures/bayer_bytes.pdf}
-    %    \label{fig:arreglo}
+  { \vspace{-15mm}
+    
+    %\begin{minipage}{0.7\linewidth}
+    \subsection*{Sensores CMOS-APS}\label{sec:intro:CMOS_sensor}
+    Un sensor de píxeles activos es un sensor que detecta
+    la radiación utilizando tecnología CMOS.
+    Estos sensores son ampliamente utilizados en los dispositivos electrónicos comerciales
+    debido a su bajo costo de producción, están presentes en celulares, consolas de videojuegos, cámaras de acción,
+    sistemas de seguridad y un sinfín de aplicaciones más.
+    %La Fig.~\ref{fig:cmos_sensor} muestra un sensor CMOS típico
+    %\end{minipage}
+    %\begin{minipage}{0.29\linewidth}
+    %  \begin{tikzfigure}[Un sensor CMOS típico.
+    %    %El sensor se colocó dentro de un recipiente plástico para protogerla de la luz visible.
+    %    ]
+    %    \includegraphics[width=0.8\textwidth]{figures/cmos_camera.jpg}
+    %    %\vspace{-20mm}
+    %    \label{fig:cmos_sensor}
     %  \end{tikzfigure}
     %\end{minipage}
+
+
+    Estos sensores consisten en un arreglo matricial de fotodiodos,
+    que producen una corriente de electrones que varía en función de la intensidad de luz recibida,
+    basándose en el efecto fotoelectrico para la generación de pares electrón-hueco.
+    Por cada fotodiodo se incorpora un amplificador. Según el diseño, se incorpora
+    un conversor analógico digital (ADC) para la lectura de los datos, a cada píxel o por columnas.
   }
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \blocknode{Configuración Experimental}%
-  {
+  { %\vspace{-15mm}
+    \begin{minipage}{0.4\linewidth}
+      \subsection*{Librería \emph{Raspiraw}}
+      \coloredbox{colorthree!50!}{
+        Para la adquisicón de datos se utilizó la librería {\it raspiraw}\cite{raspiraw}
+        debido a la rapidez con la que se toman los datos.
+
+        Los parámetros fijados fueron:
+        \begin{itemize}
+          \item Tiempo de exposición, en \SI{500}{\milli\second}.
+          \item Cuadros por segundo, en 2.
+          
+        \end{itemize}
+      }
+    \end{minipage}
+    \begin{minipage}{0.59\linewidth}
+      \subsection*{Librería propia}
+      \coloredbox{colorthree!50!}{
+        Librería en C++ con filosofía de programación orientada a objetos.
+        Esta librería permitió:
+        \begin{itemize}
+          \item Encontrar eventos, { \small basándose en pixeles adyacentes.}
+          \item Recortar imágenes.
+          \item Determinar el ruido de una imagen.
+          \item Determinar la carga de un evento.
+          \item Calcular el centro de masa de un evento.
+          \item Guardar imágenes a formato .bmp
+        \end{itemize}
+      }
+    \end{minipage}
+
     \subsection*{Emisor de rayos X}
 
       Se utilizó un emisor de rayos X de Cu para medir el espectro de este material.
@@ -172,15 +220,16 @@ APS-CMOS mediante la implementación de una librería en C++}
       En la Fig.\ref{fig:photo_xray} se muestra la configuración experimental utilizada.
 
       \begin{tikzfigure}[Configuración experimental utilizada para la detección de rayos X.
-        El sensor se colocó dentro de un recipiente plástico para protogerla de la luz visible.]
-        \includegraphics[width=0.75\textwidth]{figures/IMG_20180412_173110355_HDR}
+        %El sensor se colocó dentro de un recipiente plástico para protogerla de la luz visible.
+        ]
+        \includegraphics[width=0.5\textwidth]{figures/IMG_20180412_173110355_HDR}
         \label{fig:photo_xray}
       \end{tikzfigure}
   }
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  \plainblock[3]{($(currenty)+(6,2)$)}{23}{Características de la \emph{Raspicam} V1.3\vspace{7mm}} %
+  \plainblock[3]{($(currenty)+(6,0)$)}{23}{Características de la \emph{Raspicam} V1.3\vspace{7mm}} %
   { 
     \begin{tabular}{ll}
       \textbf{Sensor:}                      & OmniVision OV5647                               \\
@@ -202,14 +251,20 @@ APS-CMOS mediante la implementación de una librería en C++}
     \includegraphics[width=\textwidth]{figures/QR_Code_GitHub.png}
     \href{https://github.com/DBFritz/ParticleDetections}{git.io/vhOLO}
   }
-  
+
+  \blocknode[($(currenty)+(12,0)$)]{Bibliografía}
+  {
+    \bibliographystyle{unsrt}
+    \bibliography{bibliography}
+  }
 
   %%%%%%%%%%%%% NEW COLUMN %%%%%%%%%%%%%%% 
   \startsecondcolumn 
   
   \blocknode{Resultados}%
   {
-    \subsection*{Determinación del ruido de lectura}
+    \vspace{-20mm}
+      \subsection*{Determinación del ruido de lectura}
 
       \begin{minipage}{0.5\linewidth}
         \coloredbox{colorthree!50!}{
@@ -236,44 +291,90 @@ APS-CMOS mediante la implementación de una librería en C++}
           \centering
           \includegraphics[width=\linewidth]{figures/background_histo.pdf}
           \label{fig:histogram}
+          \vspace{-1cm}
         \end{tikzfigure}
       \end{minipage}%
       \begin{minipage}{.53\textwidth}
         \begin{tikzfigure}[Histograma obtenido para una imagen, con el promedio por columna restado]
-          \centering
           \includegraphics[width=\linewidth]{figures/background_histo_subs.pdf}
           \label{fig:histogram_subs}
+          \vspace{-1cm}
         \end{tikzfigure}
       \end{minipage}
     
     \vspace{10mm}
     \subsection*{Calibración y determinación de los picos $K_\alpha$ y $K_\beta$}
 
+      
+        \coloredbox{colorthree!50!}{
+          Para la calibración de la energía en función del valor del ADC, se analizó
+          el espectro de rayos X del Cu, Fe y Ca, tal como se muestra en la Fig.~\ref{fig:spectrum}.
+          La calibración se hizo en base a los picos de emisión K$_\alpha$ y K$_\beta$ de estos elementos,
+          ya que sus valores se encuentran medidos
+          \cite{xraybooklet}.
+
+          En la Fig.~\ref{fig:calibration} se muestra la calibración realizada.
+          La relación carga por unidad de ADC obtenida es de \SI{17.50(3)}{\eV / ADC}.
+
+          %Sabiendo que un Rayo X es capaz de ionizar %TODO: Completar
+          %\cite{groom2004temperature}
+        }
+      \begin{minipage}{0.57\linewidth}
+        \begin{tikzfigure}[Espectro obtenido para el Cu, Fe y Ca.]
+          \centering
+          \includegraphics[width=\linewidth]{figures/x-ray_spectrum.pdf}
+          \label{fig:spectrum}
+          \vspace{-1cm}
+        \end{tikzfigure}
+      \end{minipage}
+      \begin{minipage}{0.42\linewidth}
+        \begin{tikzfigure}[Calibración energía-canal]
+          \centering
+          \includegraphics[width=\linewidth]{figures/x-ray_calibration.pdf}
+          \label{fig:calibration}
+          \vspace{-1cm}
+        \end{tikzfigure}
+      \end{minipage}
+
     \vspace{10mm}
     \subsection*{Detección de rayos cósmicos}
-    \begin{minipage}{0.5\linewidth}
-      \coloredbox{colorthree!50!}{
-        Durante dos días de captura de video se analizaron los fotogramas en busca de eventos,
-        en busca de detectar eventos producidos por rayos cósmicos secundarios.
-        En total se encontraron 2, dichos eventos se muestran en la Fig.~\ref{fig:cosmic_rays}
-      }
-    \end{minipage}
-    \begin{tikzfigure}[Histograma obtenido para una imagen, con el promedio por columna restado]
-      \centering
-      \includegraphics[width=\linewidth]{figures/doble_evento.png}
-      \label{fig:cosmic_rays}
-    \end{tikzfigure}
-
+      \begin{minipage}{0.5\linewidth}
+        \coloredbox{colorthree!50!}{
+          Durante dos días de captura de video se analizaron los fotogramas en busca de eventos
+          producidos por partículas secundarias producidas por rayos cósmicos.
+          En total se encontraron 2, dichos eventos se muestran en la Fig.~\ref{fig:cosmic_rays}
+        }
+      \end{minipage}
+      \begin{minipage}{0.5\linewidth}
+        \centering
+        \begin{tikzfigure}[Eventos producidos por rayos cósmicos]
+          \begin{minipage}{0.49\linewidth}
+            \hspace*{\fill}\includegraphics[width=0.8\linewidth]{figures/primer_evento.png}
+          \end{minipage}
+          \begin{minipage}{0.49\linewidth}
+            \includegraphics[width=0.8\linewidth]{figures/segundo_evento.png}
+          \end{minipage}
+          \label{fig:cosmic_rays}
+        \end{tikzfigure}
+      \end{minipage}
   }
 
   \blocknode{Conclusiones}
   {
+    \vspace{-5mm}
+    Se caracterizó y se calibró el sensor para la configuración de trabajo establecida.
+    Mediante la implementación de una librería en C++
+    se observó la presencia de eventos producidos por rayos cósmicos y
+    se observaron los picos $K_{\alpha}$ y $K_{\beta}$ del Cu y los picos $K_{\alpha}$ del Fe y Ca.
 
+    El alcance de esta librería es amplio. Uno de los posible usos es la detección de plomo,
+    en el agua (vía observación del $^{210}Pb$).
   }
 
-  \blocknodew[(0,43.5)]{67}
+  \blocknodew[(0,43.7)]{67}
   {\hspace{28.5cm}\huge \texttt{Resumen} }
   {
+      \vspace{-5mm}
       \large
       Los sensores CMOS constituyen una alternativa de bajo precio para la detección de interacciones de partículas.
       En este trabajo se implementó una librería para utilizar el sensor OmniVision OV5647
@@ -289,7 +390,3 @@ APS-CMOS mediante la implementación de una librería en C++}
 \end{tikzpicture}
 
 \end{document}
-
-
-
-

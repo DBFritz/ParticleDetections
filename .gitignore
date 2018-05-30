@@ -28,6 +28,8 @@ Poster/*.fls
 Poster/*.log
 Poster/*.out
 Poster/*.synctex.gz
+Poster/figures/*.psd
 
 #Gnuplot
 fit.log
+
