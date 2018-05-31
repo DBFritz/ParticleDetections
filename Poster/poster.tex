@@ -102,6 +102,8 @@
 \usepackage[binary-units=true]{siunitx}      % para las unidades
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage[spanish,es-tabla]{babel} % Language hyphenation and typographical rules
+
 
 \usepackage{etoolbox}
 \patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
@@ -151,33 +153,33 @@ APS-CMOS mediante la implementación de una librería en C++}
 
   \blocknode
   {Introducción}%
-  { \vspace{-15mm}
+  { \vspace{-10mm}
     
-    %\begin{minipage}{0.7\linewidth}
+    \begin{minipage}{0.67\linewidth}
+    \subsection*{Raspberry Pi}
+      En este trabajo se utilizó la versión 3 de Raspberry Pi, cuyo costo aproximado es de 25 dólares.
+      Esta computadora de placa reducida ofrece una gran versatilidad debido al reducido tamaño, el bajo precio
+      y la facilidad de programación para diversas aplicaciones.
+      En este caso, se instaló el sistema operativo \emph{Raspbian} en una memoria de \SI{16}{\giga\byte},
+      el espacio restante permitió almacenar del orden de 1000 fotos en formato \emph{.raw}
+    \end{minipage}
+    \begin{minipage}{0.32\linewidth}
+      \begin{tikzfigure}[Raspberry Pi y Raspicam utilizadas]
+        \includegraphics[width=0.9\textwidth]{figures/cmos_sensor}
+        \label{fig:photo_picam}
+      \end{tikzfigure}
+    \end{minipage}
+    \vspace{-15mm}
     \subsection*{Sensores CMOS-APS}\label{sec:intro:CMOS_sensor}
-    Un sensor de píxeles activos es un sensor que detecta
-    la radiación utilizando tecnología CMOS.
-    Estos sensores son ampliamente utilizados en los dispositivos electrónicos comerciales
-    debido a su bajo costo de producción, están presentes en celulares, consolas de videojuegos, cámaras de acción,
-    sistemas de seguridad y un sinfín de aplicaciones más.
-    %La Fig.~\ref{fig:cmos_sensor} muestra un sensor CMOS típico
-    %\end{minipage}
-    %\begin{minipage}{0.29\linewidth}
-    %  \begin{tikzfigure}[Un sensor CMOS típico.
-    %    %El sensor se colocó dentro de un recipiente plástico para protogerla de la luz visible.
-    %    ]
-    %    \includegraphics[width=0.8\textwidth]{figures/cmos_camera.jpg}
-    %    %\vspace{-20mm}
-    %    \label{fig:cmos_sensor}
-    %  \end{tikzfigure}
-    %\end{minipage}
-
-
-    Estos sensores consisten en un arreglo matricial de fotodiodos,
-    que producen una corriente de electrones que varía en función de la intensidad de luz recibida,
-    basándose en el efecto fotoelectrico para la generación de pares electrón-hueco.
-    Por cada fotodiodo se incorpora un amplificador. Según el diseño, se incorpora
-    un conversor analógico digital (ADC) para la lectura de los datos, a cada píxel o por columnas.
+      Los sensor de píxeles activos utilizan tecnología CMOS para detectar radiación.
+      Existen varias aplicaciones para este tipo de sensores, debido al bajo costo y a los buenos
+      resultados obtenidos en fotografías.\cite{PerezCMOS}
+      En este caso se propone hacer uso de un sensor CMOS comercial para la detección de interacciones
+      de partículas con el sensor mismo.
+      %Estos sensores producen una corriente de electrones que varía en función de la intensidad de luz recibida,
+      %basándose en el efecto fotoelectrico para la generación de pares electrón-hueco.
+      %Por cada fotodiodo se incorpora un amplificador. Según el diseño, se incorpora
+      %un conversor analógico digital (ADC) para la lectura de los datos, a cada píxel o por columnas.
   }
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -212,7 +214,8 @@ APS-CMOS mediante la implementación de una librería en C++}
         \end{itemize}
       }
     \end{minipage}
-
+    
+    \vspace{-14mm}
     \subsection*{Emisor de rayos X}
 
       Se utilizó un emisor de rayos X de Cu para medir el espectro de este material.
@@ -222,7 +225,7 @@ APS-CMOS mediante la implementación de una librería en C++}
       \begin{tikzfigure}[Configuración experimental utilizada para la detección de rayos X.
         %El sensor se colocó dentro de un recipiente plástico para protogerla de la luz visible.
         ]
-        \includegraphics[width=0.5\textwidth]{figures/IMG_20180412_173110355_HDR}
+        \includegraphics[width=0.7\textwidth]{figures/IMG_20180412_173110355_HDR}
         \label{fig:photo_xray}
       \end{tikzfigure}
   }
@@ -273,7 +276,7 @@ APS-CMOS mediante la implementación de una librería en C++}
 
           Se realizó un histograma de los valores de los pixeles de una única imagen,
           para verificar la distribución y la dispersión del ruido.
-          Los resultados obtenidos se muestran en la Fig.~\ref{fig:background}.
+          Los resultados obtenidos se muestran en la Fig.~\ref{fig:histogram}.
 
           Debido a la fuerte dependencia del ruido con la columna, se restó la media por columna
           a cada columna. El histograma resultante se muestra en la Fig.~\ref{fig:histogram_subs}
@@ -286,19 +289,19 @@ APS-CMOS mediante la implementación de una librería en C++}
         \end{tikzfigure}
       \end{minipage}
 
-      \begin{minipage}{.47\textwidth}
-        \begin{tikzfigure}[Histograma obtenido para una imagen]
+      \begin{minipage}{.49\textwidth}
+        \begin{tikzfigure}[Histograma obtenido para una imagen\vspace{1.1cm}]
           \centering
           \includegraphics[width=\linewidth]{figures/background_histo.pdf}
           \label{fig:histogram}
-          \vspace{-1cm}
+          \vspace{-1.2cm}
         \end{tikzfigure}
       \end{minipage}%
-      \begin{minipage}{.53\textwidth}
+      \begin{minipage}{.51\textwidth}
         \begin{tikzfigure}[Histograma obtenido para una imagen, con el promedio por columna restado]
           \includegraphics[width=\linewidth]{figures/background_histo_subs.pdf}
           \label{fig:histogram_subs}
-          \vspace{-1cm}
+          \vspace{-1.5cm}
         \end{tikzfigure}
       \end{minipage}
     
@@ -314,7 +317,7 @@ APS-CMOS mediante la implementación de una librería en C++}
           \cite{xraybooklet}.
 
           En la Fig.~\ref{fig:calibration} se muestra la calibración realizada.
-          La relación carga por unidad de ADC obtenida es de \SI{17.50(3)}{\eV / ADC}.
+          La relación carga por unidad de ADC obtenida es de \SI{17.50(3)}{\eV / ADC}
 
           %Sabiendo que un Rayo X es capaz de ionizar %TODO: Completar
           %\cite{groom2004temperature}
@@ -368,11 +371,11 @@ APS-CMOS mediante la implementación de una librería en C++}
     se observaron los picos $K_{\alpha}$ y $K_{\beta}$ del Cu y los picos $K_{\alpha}$ del Fe y Ca.
 
     El alcance de esta librería es amplio. Uno de los posible usos es la detección de plomo,
-    en el agua (vía observación del $^{210}Pb$).
+    en el agua (vía observación del $^{210}Pb$).\cite{Bertou}
   }
 
   \blocknodew[(0,43.7)]{67}
-  {\hspace{28.5cm}\huge \texttt{Resumen} }
+  {\hspace{28.5cm}\huge \texttt{Resumen}}
   {
       \vspace{-5mm}
       \large
